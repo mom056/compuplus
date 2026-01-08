@@ -152,7 +152,7 @@ const VideoShowcase: React.FC = () => {
                     preload="auto"
                     onClick={(e) => { if (isExpanded) { e.stopPropagation(); togglePlayPause(); } }}
                 >
-                    <source src="https://res.cloudinary.com/dmwdt7bcu/video/upload/q_auto,vc_auto/v1767910353/Video-2_hbb5me.mp4" type="video/mp4" />
+                    <source src="https://res.cloudinary.com/dmwdt7bcu/video/upload/v1767910353/Video-2_hbb5me.mp4" type="video/mp4" />
                 </video>
 
                 {/* Holographic Scanline Overlay (Bezel) */}
