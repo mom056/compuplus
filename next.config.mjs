@@ -12,6 +12,7 @@ const nextConfig = {
         hostname: 'cdn.tailwindcss.com',
       },
     ],
+    formats: ['image/avif', 'image/webp'],
   },
 };
 

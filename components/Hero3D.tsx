@@ -5,9 +5,14 @@ import { ShieldCheck, Database, Wifi } from 'lucide-react';
 import { useApp } from '@/app/providers';
 import Image from 'next/image';
 
+import { motion, useMotionValue, useTransform } from 'framer-motion';
+
 const Hero3D = () => {
     const { content } = useApp();
-    const [rotation, setRotation] = React.useState({ x: 0, y: 0 });
+
+    // Performance Optimization: Use MotionValues instead of State to prevent re-renders on every mouse move
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
         const { clientX, clientY, currentTarget } = e;
@@ -16,13 +21,18 @@ const Hero3D = () => {
         const x = (clientX - left) / width - 0.5;
         const y = (clientY - top) / height - 0.5;
 
-        // Max rotation: 15 degrees
-        setRotation({ x: y * -15, y: x * 15 });
+        mouseX.set(x);
+        mouseY.set(y);
     };
 
     const handleMouseLeave = () => {
-        setRotation({ x: 0, y: 0 });
+        mouseX.set(0);
+        mouseY.set(0);
     };
+
+    // Transform mouse values to rotation degrees (Max 15 degrees)
+    const rotateX = useTransform(mouseY, (value) => value * -15);
+    const rotateY = useTransform(mouseX, (value) => value * 15);
 
     return (
         <div
@@ -30,11 +40,13 @@ const Hero3D = () => {
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
         >
-            <div
-                className="relative w-[320px] h-[320px] md:w-[500px] md:h-[500px] transform-style-3d transition-transform duration-200 ease-out"
+            <motion.div
+                className="relative w-[320px] h-[320px] md:w-[500px] md:h-[500px] transform-style-3d"
                 style={{
-                    transform: `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`
+                    rotateX,
+                    rotateY,
                 }}
+                transition={{ type: "spring", stiffness: 400, damping: 30 }}
             >
                 {/* --- Interactive Network Lines (SVG) --- */}
                 <svg className="absolute inset-0 w-full h-full z-10 pointer-events-none overflow-visible">
@@ -58,7 +70,6 @@ const Hero3D = () => {
                 {/* Ring 2: Tilted */}
                 <div className="absolute inset-8 md:inset-12 rounded-full border border-violet-500/10 dark:border-violet-500/30 border-r-violet-500 dark:border-r-violet-400 border-l-transparent animate-spin-reverse-slow duration-[15s] transform-gpu will-change-transform shadow-lg shadow-violet-500/5 dark:shadow-[0_0_20px_rgba(139,92,246,0.05)] pointer-events-none" style={{ transform: 'rotateX(60deg) rotateY(10deg)' }}></div>
 
-                {/* --- Central Core --- */}
                 {/* --- Central Core --- */}
                 <div className="absolute inset-0 m-auto w-32 h-32 md:w-48 md:h-48 rounded-full bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-white/10 flex items-center justify-center shadow-2xl shadow-cyan-500/20 dark:shadow-cyan-500/10 z-20 hover:scale-105 transition-transform duration-300 cursor-pointer group/core will-change-transform" style={{ transform: 'translateZ(20px)' }}>
                     <div className="absolute inset-0 rounded-full bg-cyan-400/5 animate-ping-slow group-hover/core:animate-none pointer-events-none" />
@@ -88,7 +99,7 @@ const Hero3D = () => {
                     <ServiceNode icon={ShieldCheck} color="indigo" title="Security" subtitle="" position="left" />
                 </div>
 
-            </div>
+            </motion.div>
         </div>
     );
 };
