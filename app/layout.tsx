@@ -10,9 +10,9 @@ import ClientBackgrounds from '@/components/ClientBackgrounds';
 import ScrollProgress from '@/components/ScrollProgress';
 
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
-const cairo = Cairo({ subsets: ['arabic', 'latin'], variable: '--font-cairo' });
-const firaCode = Fira_Code({ subsets: ['latin'], variable: '--font-fira-code' });
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
+const cairo = Cairo({ subsets: ['arabic', 'latin'], variable: '--font-cairo', display: 'swap' });
+const firaCode = Fira_Code({ subsets: ['latin'], variable: '--font-fira-code', display: 'swap' });
 
 export const metadata: Metadata = {
     title: 'CompuPlus | Engineering the Future',
