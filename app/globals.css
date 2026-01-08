@@ -1,0 +1,206 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    /* Transparent to show ParticleBackground */
+    @apply bg-transparent text-slate-900 dark:text-slate-200 transition-colors duration-500 antialiased;
+    overflow-x: hidden;
+  }
+
+  /* Smooth font rendering */
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer components {
+
+  /* Premium Glass Card Effect - HOLOGRAPHIC UPDATE */
+  .glass-card {
+    /* Light Mode: White with high transparency */
+    /* Dark Mode: Navy with high transparency */
+    @apply relative bg-white/40 dark:bg-navy-900/30 backdrop-blur-md border border-white/20 dark:border-white/10 shadow-xl shadow-slate-200/20 dark:shadow-navy-950/50 rounded-2xl transition-all duration-500;
+  }
+
+  .glass-card:hover {
+    @apply shadow-2xl shadow-cyan-500/20 dark:shadow-cyan-400/10 border-cyan-400/30 dark:border-cyan-500/30 bg-white/60 dark:bg-navy-900/50 transform -translate-y-1;
+  }
+
+  /* Premium Button Styles */
+  .btn-primary {
+    @apply px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold rounded-xl shadow-lg shadow-cyan-500/25 hover:shadow-xl hover:shadow-cyan-500/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300;
+  }
+
+  .btn-secondary {
+    @apply px-8 py-4 bg-white/50 dark:bg-navy-800/50 backdrop-blur-sm text-slate-700 dark:text-white font-bold rounded-xl border-2 border-slate-200/50 dark:border-white/10 hover:border-cyan-300 dark:hover:border-cyan-500/50 hover:text-cyan-600 dark:hover:text-cyan-400 shadow-md hover:shadow-lg transition-all duration-300;
+  }
+
+  /* Section styling */
+  .section-padding {
+    @apply py-24 md:py-32 px-6;
+  }
+
+  /* Gradient text utility */
+  .gradient-text {
+    @apply text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-violet-500;
+  }
+}
+
+/* Optimized Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gradient-to-b from-cyan-400/50 to-violet-500/50 rounded-full hover:from-cyan-400 hover:to-violet-500 transition-colors;
+}
+
+/* Hardware Accelerated Classes */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform, opacity;
+}
+
+/* Performance boost for off-screen content */
+.content-visibility-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 1000px;
+}
+
+/* Premium grid background - REMOVED TO SHOW PARTICLES */
+/* We keep the classes but make them transparent/subtle overlays if needed */
+.bg-grid {
+  background-size: 50px 50px;
+  background-image:
+    linear-gradient(to right, rgba(139, 92, 246, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 229, 255, 0.03) 1px, transparent 1px);
+  mask-image: linear-gradient(to bottom, transparent, 5%, black, 95%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, 5%, black, 95%, transparent);
+}
+
+.dark .bg-grid {
+  background-image:
+    linear-gradient(to right, rgba(139, 92, 246, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 229, 255, 0.02) 1px, transparent 1px);
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.preserve-3d,
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+/* Smooth marquee pause */
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* ==================== LIGHT MODE ENHANCEMENTS ==================== */
+
+/* Light mode base styling - REMOVED SOLID GRADIENT */
+
+
+
+
+/* Light mode sections with subtle gradients */
+section {
+  @apply relative;
+  background: transparent;
+}
+
+/* Light mode improved text contrast */
+.dark .text-slate-600 {
+  @apply text-slate-400;
+}
+
+/* Card enhancements for light mode */
+.light-card {
+  @apply bg-white/70 backdrop-blur-md shadow-xl shadow-slate-200/40 border border-slate-100/50 rounded-2xl;
+}
+
+/* ==================== MOBILE OPTIMIZATIONS ==================== */
+
+@media (max-width: 768px) {
+  .touch-action-pan {
+    touch-action: pan-y;
+  }
+
+  /* Better tap targets for mobile */
+  button,
+  a {
+    min-height: 44px;
+  }
+
+  /* Prevent text overflow on mobile */
+  h1,
+  h2,
+  h3,
+  h4 {
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  /* Reduce animations on mobile for performance */
+  .animate-blob {
+    animation-duration: 15s;
+  }
+
+  /* Smaller spacing on mobile */
+  .section-padding {
+    @apply py-16 px-4;
+  }
+}
+
+/* Fix for mobile navbar overlap */
+.pt-safe {
+  padding-top: env(safe-area-inset-top);
+}
+
+/* ==================== HOVER EFFECTS ==================== */
+
+/* Premium hover lift effect */
+.hover-lift {
+  @apply transition-all duration-300;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  @apply shadow-2xl;
+}
+
+/* Glow effect on hover */
+.hover-glow:hover {
+  box-shadow: 0 0 30px rgba(0, 229, 255, 0.3);
+}
+
+/* ==================== FOCUS STATES ==================== */
+
+/* Accessible focus states */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  @apply outline-none ring-2 ring-cyan-500 ring-offset-2 ring-offset-white dark:ring-offset-navy-950;
+}
+
+/* ==================== SELECTION ==================== */
+
+::selection {
+  @apply bg-cyan-500/30 text-cyan-900 dark:text-cyan-100;
+}
+
+/* ==================== LOADING STATES ==================== */
+
+.skeleton {
+  @apply bg-gradient-to-r from-slate-200 via-slate-100 to-slate-200 dark:from-navy-900 dark:via-navy-800 dark:to-navy-900 animate-pulse rounded;
+}
