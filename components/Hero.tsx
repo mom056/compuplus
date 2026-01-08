@@ -9,7 +9,7 @@ import dynamic from 'next/dynamic';
 const Hero3D = dynamic(() => import('./Hero3D'), {
   ssr: false,
   loading: () => (
-    <div className="relative w-[320px] h-[320px] md:w-[500px] md:h-[500px] flex items-center justify-center">
+    <div className="relative w-full h-[400px] lg:h-[600px] flex items-center justify-center">
       <div className="w-32 h-32 rounded-full border-4 border-slate-200 dark:border-slate-800 border-t-cyan-500 animate-spin" />
     </div>
   )
