@@ -17,28 +17,14 @@ const Partners: React.FC = () => {
             <div key={idx} className="group relative flex flex-col items-center">
               {/* Logo Area */}
               <div className="relative w-32 h-16 grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500">
-                {/* 
-                  Note: We are using a simple <img> tag with error handling for now 
-                  to allow the user to easily drop files without Next.js Image strictness 
-                  until they have actual files.
-                */}
-                <img
+
+                <Image
                   src={partner.logo}
                   alt={partner.name}
+                  width={128}
+                  height={64}
                   className="w-full h-full object-contain"
-                  onError={(e) => {
-                    // Fallback to text if image fails
-                    e.currentTarget.style.display = 'none';
-                    e.currentTarget.parentElement?.classList.remove('h-16', 'w-32');
-                    const textSpan = document.getElementById(`partner-text-${idx}`);
-                    if (textSpan) textSpan.style.display = 'block';
-                  }}
                 />
-
-                {/* Fallback Text (Hidden by default, shown via JS onerror above) */}
-                <div id={`partner-text-${idx}`} className="hidden text-2xl font-bold text-slate-300 dark:text-slate-600 group-hover:text-slate-800 dark:group-hover:text-white transition-colors">
-                  {partner.name}
-                </div>
               </div>
 
               <span className="absolute -bottom-6 left-0 w-full text-center text-[10px] text-cyan-600 dark:text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity uppercase font-mono tracking-wider">

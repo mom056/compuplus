@@ -50,7 +50,7 @@ const Hero: React.FC = () => {
       {/* Moving Blobs - Maximum visibility */}
       <div className="absolute top-[5%] left-[5%] w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-gradient-to-br from-violet-400 to-fuchsia-300 dark:from-violet-600/30 dark:to-fuchsia-600/20 rounded-full filter blur-[30px] md:blur-[50px] animate-blob opacity-70 dark:opacity-40 transform-gpu will-change-transform pointer-events-none" />
       <div className="absolute bottom-[10%] right-[5%] w-[350px] h-[350px] md:w-[550px] md:h-[550px] bg-gradient-to-br from-cyan-400 to-blue-300 dark:from-cyan-500/30 dark:to-blue-500/20 rounded-full filter blur-[30px] md:blur-[50px] animate-blob opacity-70 dark:opacity-40 transform-gpu will-change-transform pointer-events-none" style={{ animationDelay: '3s' }} />
-      <div className="absolute top-[40%] left-[30%] w-[250px] h-[250px] md:w-[400px] md:h-[400px] bg-gradient-to-br from-pink-300 to-rose-200 dark:from-pink-600/25 dark:to-rose-600/15 rounded-full filter blur-[40px] animate-blob opacity-60 dark:opacity-30 transform-gpu will-change-transform pointer-events-none" style={{ animationDelay: '6s' }} />
+      <div className="absolute top-[40%] left-[30%] w-[250px] h-[250px] md:w-[400px] md:h-[400px] bg-gradient-to-br from-pink-300 to-rose-200 dark:from-pink-600/25 dark:to-rose-600/15 rounded-full filter blur-[40px] animate-blob opacity-60 dark:opacity-30 transform-gpu will-change-transform pointer-events-none hidden md:block" style={{ animationDelay: '6s' }} />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
 
