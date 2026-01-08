@@ -1,21 +1,23 @@
 "use client";
 
 import Hero from '@/components/Hero';
-import Services from '@/components/Services';
-import Process from '@/components/Process';
-import AboutTimeline from '@/components/AboutTimeline';
-import WhyUs from '@/components/WhyUs';
-import TechOrbit from '@/components/TechOrbit';
-import Portfolio from '@/components/Portfolio';
 import { useApp } from './providers';
-import Clients from '@/components/Clients';
-import CTA from '@/components/CTA';
-import Contact from '@/components/Contact';
 import dynamic from 'next/dynamic';
 
+const Services = dynamic(() => import('@/components/Services'));
+const Process = dynamic(() => import('@/components/Process'));
+const AboutTimeline = dynamic(() => import('@/components/AboutTimeline'));
+const WhyUs = dynamic(() => import('@/components/WhyUs'));
+const TechOrbit = dynamic(() => import('@/components/TechOrbit'));
+const Portfolio = dynamic(() => import('@/components/Portfolio'));
+const Clients = dynamic(() => import('@/components/Clients'));
+const CTA = dynamic(() => import('@/components/CTA'));
+const Contact = dynamic(() => import('@/components/Contact'));
+
+// VideoShowcase is heavy and interactive, strictly client-side
 const VideoShowcase = dynamic(() => import('@/components/VideoShowcase'), {
-    ssr: false, // Video player is client-heavy and doesn't need SSR
-    loading: () => <div className="h-screen bg-black animate-pulse" /> // Placeholder
+    ssr: false,
+    loading: () => <div className="h-screen bg-black animate-pulse" />
 });
 
 export default function Home() {
