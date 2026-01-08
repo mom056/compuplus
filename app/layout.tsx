@@ -100,6 +100,7 @@ export default function RootLayout({
     return (
         <html lang="en" className="scroll-smooth">
             <head>
+                <link rel="preload" href="/logo.png" as="image" />
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
