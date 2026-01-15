@@ -3,7 +3,6 @@
 import React from 'react';
 import { ShieldCheck, Database, Wifi } from 'lucide-react';
 import { useApp } from '@/app/providers';
-import Image from 'next/image';
 
 import { motion, useMotionValue, useTransform } from 'framer-motion';
 
@@ -73,14 +72,16 @@ const Hero3D = () => {
                 {/* --- Central Core --- */}
                 <div className="absolute inset-0 m-auto w-32 h-32 md:w-48 md:h-48 rounded-full bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-white/10 flex items-center justify-center shadow-2xl shadow-cyan-500/20 dark:shadow-cyan-500/10 z-20 hover:scale-105 transition-transform duration-300 cursor-pointer group/core will-change-transform" style={{ transform: 'translateZ(20px)' }}>
                     <div className="absolute inset-0 rounded-full bg-cyan-400/5 animate-ping-slow group-hover/core:animate-none pointer-events-none" />
-                    <div className="relative w-20 h-20 md:w-28 md:h-28">
-                        <Image
-                            src="/logo.png"
+                    <div className="relative w-20 h-20 md:w-28 md:h-28 flex items-center justify-center">
+                        {/* Using optimized small logo to avoid Next.js 750px fallback */}
+                        <img
+                            src="/logo-sm.png"
                             alt="CompuPlus Logo"
-                            fill
-                            className="object-contain drop-shadow-lg"
-                            sizes="(max-width: 768px) 80px, 112px"
-                            quality={75}
+                            width={112}
+                            height={112}
+                            className="object-contain drop-shadow-lg w-full h-full"
+                            loading="eager"
+                            decoding="async"
                         />
                     </div>
                 </div>
