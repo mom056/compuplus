@@ -17,6 +17,49 @@ const nextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
   },
+
+  // Security Headers
+  async headers() {
+    return [
+      {
+        // Apply to all routes
+        source: '/:path*',
+        headers: [
+          // Prevent clickjacking - blocks site from being embedded in iframes
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          // Prevent MIME type sniffing
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          // Control referrer information
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin',
+          },
+          // Disable unnecessary browser features
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()',
+          },
+          // XSS Protection (legacy but still useful)
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block',
+          },
+          // Force HTTPS
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=31536000; includeSubDomains',
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;
+
