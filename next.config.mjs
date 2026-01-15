@@ -25,6 +25,22 @@ const nextConfig = {
         // Apply to all routes
         source: '/:path*',
         headers: [
+          // Content Security Policy - The most important security header
+          {
+            key: 'Content-Security-Policy',
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+              "font-src 'self' https://fonts.gstatic.com",
+              "img-src 'self' data: blob: https://images.unsplash.com https://res.cloudinary.com https://www.transparenttextures.com",
+              "media-src 'self' https://res.cloudinary.com",
+              "connect-src 'self' https://generativelanguage.googleapis.com",
+              "frame-ancestors 'none'",
+              "base-uri 'self'",
+              "form-action 'self'",
+            ].join('; '),
+          },
           // Prevent clickjacking - blocks site from being embedded in iframes
           {
             key: 'X-Frame-Options',
