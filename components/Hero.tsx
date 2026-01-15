@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+"use client";
+
+import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { useApp } from '@/app/providers';
-import { Reveal } from './Reveal'; // Import Animation Component
-import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
+import { Reveal } from './Reveal';
 import dynamic from 'next/dynamic';
 
 // Dynamically import Hero3D with reduced loading weight
@@ -15,23 +16,26 @@ const Hero3D = dynamic(() => import('./Hero3D'), {
   )
 });
 
+// Hardcoded English defaults for instant SSR (no JS wait)
+const DEFAULTS = {
+  badge: 'PIONEERING SINCE 1997',
+  title: 'FUSING INFRASTRUCTURE WITH SOFTWARE INTELLIGENCE',
+  subtitle: 'A unified technology powerhouse providing turnkey solutions: Network Infrastructure, Odoo ERP Implementation, Custom Software, and Security Systems.',
+  ctaPrimary: 'Start Your Project',
+  ctaSecondary: 'View Our Work',
+  scroll: 'Scroll to explore',
+};
+
 const Hero: React.FC = () => {
   const { content } = useApp();
-  const fullText = content.hero.title;
-  const count = useMotionValue(0);
-  const rounded = useTransform(count, (latest) => Math.round(latest));
-  const displayText = useTransform(rounded, (latest) => fullText.slice(0, latest));
 
-  useEffect(() => {
-    count.set(0);
-    const controls = animate(count, fullText.length, {
-      type: "tween",
-      duration: 3,
-      ease: "easeInOut",
-      delay: 0.5,
-    });
-    return controls.stop;
-  }, [fullText]);
+  // Use context values if available, otherwise use SSR defaults
+  const badge = content?.hero?.badge || DEFAULTS.badge;
+  const title = content?.hero?.title || DEFAULTS.title;
+  const subtitle = content?.hero?.subtitle || DEFAULTS.subtitle;
+  const ctaPrimary = content?.hero?.ctaPrimary || DEFAULTS.ctaPrimary;
+  const ctaSecondary = content?.hero?.ctaSecondary || DEFAULTS.ctaSecondary;
+  const scroll = content?.hero?.scroll || DEFAULTS.scroll;
 
   const scrollToContact = () => {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
@@ -54,37 +58,40 @@ const Hero: React.FC = () => {
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
 
-        {/* Left: Content with Animations */}
+        {/* Left: Content - SSR Optimized */}
         <div className="space-y-10 pt-10 lg:pt-0 text-center lg:text-start">
 
-          {/* Badge - Visible immediately */}
-          <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-violet-500/30 bg-white/50 dark:bg-violet-900/10 backdrop-blur-md shadow-sm dark:shadow-[0_0_15px_rgba(139,92,246,0.2)] hover:scale-105 transition-transform duration-300 animate-fade-in-up">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-violet-500/30 bg-white/50 dark:bg-violet-900/10 backdrop-blur-md shadow-sm dark:shadow-[0_0_15px_rgba(139,92,246,0.2)] hover:scale-105 transition-transform duration-300">
             <span className="relative flex h-3 w-3">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
             </span>
             <span className="text-sm font-mono text-slate-700 dark:text-cyan-200 uppercase tracking-widest font-bold">
-              {content.hero.badge}
+              {badge}
             </span>
           </div>
 
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.2] text-slate-900 dark:text-white tracking-tight min-h-[120px] md:min-h-[160px] animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+          {/* Title - SSR with fallback */}
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.2] text-slate-900 dark:text-white tracking-tight">
             <span className="inline text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-cyan-500 to-violet-600 dark:from-white dark:via-cyan-400 dark:to-violet-400 animate-gradient-x">
-              {fullText}
+              {title}
             </span>
           </h1>
 
-          <p className="text-xl text-slate-600 dark:text-slate-300 max-w-xl leading-relaxed mx-auto lg:mx-0 border-l-4 border-violet-500 pl-6 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-            {content.hero.subtitle}
+          {/* Subtitle */}
+          <p className="text-xl text-slate-600 dark:text-slate-300 max-w-xl leading-relaxed mx-auto lg:mx-0 border-l-4 border-violet-500 pl-6">
+            {subtitle}
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start pt-4 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+          {/* CTAs */}
+          <div className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start pt-4">
             <button
               onClick={scrollToContact}
               className="group relative px-10 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold rounded-lg overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_30px_rgba(0,229,255,0.3)] shadow-lg shadow-cyan-500/20"
             >
               <span className="relative z-10 flex items-center gap-3">
-                {content.hero.ctaPrimary} <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                {ctaPrimary} <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
               </span>
               <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 skew-x-12" />
             </button>
@@ -93,13 +100,13 @@ const Hero: React.FC = () => {
               onClick={scrollToPortfolio}
               className="px-10 py-4 border border-violet-500/50 hover:border-violet-400 text-slate-700 dark:text-white rounded-lg hover:bg-violet-500/10 transition-all font-mono tracking-wide hover:scale-105"
             >
-              {content.hero.ctaSecondary}
+              {ctaSecondary}
             </button>
           </div>
         </div>
 
-        {/* Right: New 3D Visualization */}
-        <Reveal delay={0.6} direction="left" className="block relative z-20 mt-10 lg:mt-0">
+        {/* Right: 3D Visualization */}
+        <Reveal delay={0.2} direction="left" className="block relative z-20 mt-10 lg:mt-0">
           <Hero3D />
         </Reveal>
 
@@ -107,7 +114,7 @@ const Hero: React.FC = () => {
 
       {/* Scroll Indicator */}
       <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-slate-400 dark:text-slate-500 animate-bounce">
-        <span className="text-xs font-mono uppercase tracking-widest">{content.hero.scroll}</span>
+        <span className="text-xs font-mono uppercase tracking-widest">{scroll}</span>
         <div className="w-1 h-16 bg-gradient-to-b from-cyan-500 to-transparent rounded-full"></div>
       </div>
     </section>
