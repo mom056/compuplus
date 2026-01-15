@@ -57,55 +57,45 @@ const Hero: React.FC = () => {
         {/* Left: Content with Animations */}
         <div className="space-y-10 pt-10 lg:pt-0 text-center lg:text-start">
 
-          <Reveal delay={0.1}>
-            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-violet-500/30 bg-white/50 dark:bg-violet-900/10 backdrop-blur-md shadow-sm dark:shadow-[0_0_15px_rgba(139,92,246,0.2)] hover:scale-105 transition-transform duration-300">
-              <span className="relative flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
-              </span>
-              <span className="text-sm font-mono text-slate-700 dark:text-cyan-200 uppercase tracking-widest font-bold">
-                {content.hero.badge}
-              </span>
-            </div>
-          </Reveal>
+          {/* Badge - Visible immediately */}
+          <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-violet-500/30 bg-white/50 dark:bg-violet-900/10 backdrop-blur-md shadow-sm dark:shadow-[0_0_15px_rgba(139,92,246,0.2)] hover:scale-105 transition-transform duration-300 animate-fade-in-up">
+            <span className="relative flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
+            </span>
+            <span className="text-sm font-mono text-slate-700 dark:text-cyan-200 uppercase tracking-widest font-bold">
+              {content.hero.badge}
+            </span>
+          </div>
 
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.2] text-slate-900 dark:text-white tracking-tight min-h-[200px] md:min-h-[280px]">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.2] text-slate-900 dark:text-white tracking-tight min-h-[120px] md:min-h-[160px] animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
             <span className="inline text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-cyan-500 to-violet-600 dark:from-white dark:via-cyan-400 dark:to-violet-400 animate-gradient-x">
-              <motion.span>{displayText}</motion.span>
-              <motion.span
-                animate={{ opacity: [0, 1, 0] }}
-                transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
-                className="inline-block w-[4px] h-[1em] bg-violet-600 dark:bg-violet-400 ml-1 align-middle"
-              />
+              {fullText}
             </span>
           </h1>
 
-          <Reveal delay={0.3}>
-            <p className="text-xl text-slate-600 dark:text-slate-300 max-w-xl leading-relaxed mx-auto lg:mx-0 border-l-4 border-violet-500 pl-6">
-              {content.hero.subtitle}
-            </p>
-          </Reveal>
+          <p className="text-xl text-slate-600 dark:text-slate-300 max-w-xl leading-relaxed mx-auto lg:mx-0 border-l-4 border-violet-500 pl-6 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+            {content.hero.subtitle}
+          </p>
 
-          <Reveal delay={0.5}>
-            <div className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start pt-4">
-              <button
-                onClick={scrollToContact}
-                className="group relative px-10 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold rounded-lg overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_30px_rgba(0,229,255,0.3)] shadow-lg shadow-cyan-500/20"
-              >
-                <span className="relative z-10 flex items-center gap-3">
-                  {content.hero.ctaPrimary} <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-                </span>
-                <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 skew-x-12" />
-              </button>
+          <div className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start pt-4 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+            <button
+              onClick={scrollToContact}
+              className="group relative px-10 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold rounded-lg overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_30px_rgba(0,229,255,0.3)] shadow-lg shadow-cyan-500/20"
+            >
+              <span className="relative z-10 flex items-center gap-3">
+                {content.hero.ctaPrimary} <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+              </span>
+              <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 skew-x-12" />
+            </button>
 
-              <button
-                onClick={scrollToPortfolio}
-                className="px-10 py-4 border border-violet-500/50 hover:border-violet-400 text-slate-700 dark:text-white rounded-lg hover:bg-violet-500/10 transition-all font-mono tracking-wide hover:scale-105"
-              >
-                {content.hero.ctaSecondary}
-              </button>
-            </div>
-          </Reveal>
+            <button
+              onClick={scrollToPortfolio}
+              className="px-10 py-4 border border-violet-500/50 hover:border-violet-400 text-slate-700 dark:text-white rounded-lg hover:bg-violet-500/10 transition-all font-mono tracking-wide hover:scale-105"
+            >
+              {content.hero.ctaSecondary}
+            </button>
+          </div>
         </div>
 
         {/* Right: New 3D Visualization */}
