@@ -25,8 +25,8 @@ const COMPANY_INFO = {
 
 const SOCIAL_LINKS = [
   { id: 'whatsapp', name: 'WhatsApp', url: 'https://wa.me/20222728010', icon: MessageCircle, color: 'bg-gradient-to-br from-green-500 to-green-600 hover:from-green-400 hover:to-green-500' },
-  { id: 'facebook', name: 'Facebook', url: 'https://facebook.com/compuplus', icon: Facebook, color: 'bg-gradient-to-br from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600' },
-  { id: 'linkedin', name: 'LinkedIn', url: 'https://linkedin.com/company/compuplus', icon: Linkedin, color: 'bg-gradient-to-br from-blue-700 to-blue-800 hover:from-blue-600 hover:to-blue-700' },
+  { id: 'facebook', name: 'Facebook', url: 'https://www.facebook.com/Compuplusc', icon: Facebook, color: 'bg-gradient-to-br from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600' },
+  { id: 'linkedin', name: 'LinkedIn', url: 'https://www.linkedin.com/in/raafat-girgis-a4a91674', icon: Linkedin, color: 'bg-gradient-to-br from-blue-700 to-blue-800 hover:from-blue-600 hover:to-blue-700' },
   { id: 'instagram', name: 'Instagram', url: 'https://instagram.com/compuplus', icon: Instagram, color: 'bg-gradient-to-br from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500' },
 ];
 

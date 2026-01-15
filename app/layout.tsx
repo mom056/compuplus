@@ -79,8 +79,8 @@ export default function RootLayout({
             availableLanguage: ['English', 'Arabic']
         },
         sameAs: [
-            'https://facebook.com/compuplus',
-            'https://linkedin.com/company/compuplus',
+            'https://www.facebook.com/Compuplusc',
+            'https://www.linkedin.com/in/raafat-girgis-a4a91674',
             'https://instagram.com/compuplus'
         ],
         hasOfferCatalog: {

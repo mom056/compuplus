@@ -17,8 +17,8 @@ const Footer: React.FC = () => {
 
   const SOCIAL_LINKS = [
     { id: 'whatsapp', name: 'WhatsApp', url: 'https://wa.me/20222728010', icon: MessageCircle },
-    { id: 'facebook', name: 'Facebook', url: 'https://facebook.com/compuplus', icon: Facebook },
-    { id: 'linkedin', name: 'LinkedIn', url: 'https://linkedin.com/company/compuplus', icon: Linkedin },
+    { id: 'facebook', name: 'Facebook', url: 'https://www.facebook.com/Compuplusc', icon: Facebook },
+    { id: 'linkedin', name: 'LinkedIn', url: 'https://www.linkedin.com/in/raafat-girgis-a4a91674', icon: Linkedin },
     { id: 'instagram', name: 'Instagram', url: 'https://instagram.com/compuplus', icon: Instagram },
   ];
 

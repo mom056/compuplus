@@ -132,14 +132,14 @@ export const SOCIALS = [
     {
         id: 'facebook',
         name: 'Facebook',
-        url: 'https://facebook.com/compuplus',
+        url: 'https://www.facebook.com/Compuplusc',
         icon: 'Globe',
         color: 'bg-blue-600 hover:bg-blue-700'
     },
     {
         id: 'linkedin',
         name: 'LinkedIn',
-        url: 'https://linkedin.com/company/compuplus',
+        url: 'https://www.linkedin.com/in/raafat-girgis-a4a91674',
         icon: 'Users',
         color: 'bg-blue-700 hover:bg-blue-800'
     },
