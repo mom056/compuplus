@@ -32,10 +32,10 @@
     "typescript": "~5.8.2"
   },
   "browserslist": [
-    "chrome > 90",
-    "firefox > 90",
-    "safari > 14",
-    "edge > 90",
+    "chrome >= 95",
+    "firefox >= 95",
+    "safari >= 15.6",
+    "edge >= 95",
     "not IE 11"
   ]
 }

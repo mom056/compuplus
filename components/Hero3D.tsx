@@ -81,7 +81,7 @@ const Hero3D = () => {
                             height={128}
                             className="object-contain drop-shadow-lg"
                             priority
-                            sizes="(max-width: 768px) 96px, 128px"
+                            sizes="200px"
                             quality={90}
                         />
                     </div>
