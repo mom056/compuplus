@@ -100,6 +100,9 @@ export default function RootLayout({
     return (
         <html lang="en" className="scroll-smooth">
             <head>
+                {/* Preconnect to critical third-party origins */}
+                <link rel="preconnect" href="https://www.transparenttextures.com" />
+                <link rel="dns-prefetch" href="https://www.transparenttextures.com" />
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

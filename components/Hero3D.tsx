@@ -73,16 +73,14 @@ const Hero3D = () => {
                 {/* --- Central Core --- */}
                 <div className="absolute inset-0 m-auto w-32 h-32 md:w-48 md:h-48 rounded-full bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-white/10 flex items-center justify-center shadow-2xl shadow-cyan-500/20 dark:shadow-cyan-500/10 z-20 hover:scale-105 transition-transform duration-300 cursor-pointer group/core will-change-transform" style={{ transform: 'translateZ(20px)' }}>
                     <div className="absolute inset-0 rounded-full bg-cyan-400/5 animate-ping-slow group-hover/core:animate-none pointer-events-none" />
-                    <div className="relative w-20 h-20 md:w-32 md:h-32 flex items-center justify-center transform-style-3d transition-transform duration-[1.5s]">
+                    <div className="relative w-20 h-20 md:w-28 md:h-28">
                         <Image
                             src="/logo.png"
                             alt="CompuPlus Logo"
-                            width={128}
-                            height={128}
+                            fill
                             className="object-contain drop-shadow-lg"
-                            priority
-                            sizes="150px"
-                            quality={90}
+                            sizes="(max-width: 768px) 80px, 112px"
+                            quality={75}
                         />
                     </div>
                 </div>
