@@ -50,15 +50,15 @@ const Footer: React.FC = () => {
 
             {/* Quick Contact */}
             <div className="space-y-3 text-sm">
-              <a href="https://maps.app.goo.gl/mhFpozETm5NqcuYP7" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors group">
+              <a href="https://maps.app.goo.gl/mhFpozETm5NqcuYP7" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors group">
                 <MapPin className="w-4 h-4 text-cyan-500 flex-shrink-0" />
                 <span>{lang === 'ar' ? '128، مصطفى النحاس، مدينة نصر' : '128, Mostafa ElNahas, Nasr City'}</span>
               </a>
-              <a href="mailto:info@compuplus.cc" className="flex items-center gap-3 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">
+              <a href="mailto:info@compuplus.cc" className="flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">
                 <Mail className="w-4 h-4 text-violet-500 flex-shrink-0" />
                 <span>info@compuplus.cc</span>
               </a>
-              <a href="tel:+20222728010" className="flex items-center gap-3 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors" dir="ltr">
+              <a href="tel:+20222728010" className="flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors" dir="ltr">
                 <Phone className="w-4 h-4 text-green-500 flex-shrink-0" />
                 <span>+20 2 2272 8010</span>
               </a>
@@ -73,7 +73,7 @@ const Footer: React.FC = () => {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-sm text-slate-500 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
+                  className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
                 >
                   {link.name}
                 </Link>

@@ -131,6 +131,7 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
             <button
               onClick={toggleLang}
               className="flex items-center gap-1 text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors font-sans"
+              aria-label="Switch Language"
             >
               <Globe size={18} />
               <span>{lang === 'en' ? 'AR' : 'EN'}</span>
@@ -157,6 +158,7 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
             <button
               onClick={toggleLang}
               className="text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-cyan-600 font-sans"
+              aria-label="Switch Language Mobile"
             >
               {lang === 'en' ? 'AR' : 'EN'}
             </button>
@@ -164,12 +166,14 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
             <button
               onClick={toggleTheme}
               className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-white/10 transition-colors text-slate-600 dark:text-slate-300"
+              aria-label="Toggle Theme Mobile"
             >
               {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
             </button>
             <button
               className="text-slate-900 dark:text-white p-1"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Toggle Mobile Menu"
             >
               {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
             </button>
