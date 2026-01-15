@@ -69,7 +69,7 @@ const Hero: React.FC = () => {
             </div>
           </Reveal>
 
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.2] text-slate-900 dark:text-white tracking-tight min-h-[140px] md:min-h-[180px]">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.2] text-slate-900 dark:text-white tracking-tight min-h-[200px] md:min-h-[280px]">
             <span className="inline text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-cyan-500 to-violet-600 dark:from-white dark:via-cyan-400 dark:to-violet-400 animate-gradient-x">
               <motion.span>{displayText}</motion.span>
               <motion.span

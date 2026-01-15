@@ -149,7 +149,8 @@ const VideoShowcase: React.FC = () => {
                     muted
                     loop
                     playsInline
-                    preload="auto"
+                    preload="none"
+                    poster="/logo.png" // Use logo as temporary poster to avoid empty black box
                     onClick={(e) => { if (isExpanded) { e.stopPropagation(); togglePlayPause(); } }}
                 >
                     <source src="https://res.cloudinary.com/dmwdt7bcu/video/upload/q_auto,vc_auto/v1767910353/Video-2_hbb5me.mp4" type="video/mp4" />
