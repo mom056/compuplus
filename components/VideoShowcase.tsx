@@ -23,22 +23,16 @@ const VideoShowcase: React.FC = () => {
             (entries) => {
                 const entry = entries[0];
                 if (entry.isIntersecting) {
-                    setShouldLoadVideo(true); // Load video resource
-                    // If video is loaded and ready, play it
-                    if (videoRef.current && !isExpanded) {
-                        videoRef.current.muted = true;
-                        videoRef.current.play().catch(() => { });
-                        setIsPlaying(true);
-                    }
+                    setShouldLoadVideo(true);
                 } else if (!entry.isIntersecting && !isExpanded) {
-                    // Pause if scrolled away and not expanded to save resources
+                    // Pause if scrolled away and not expanded
                     if (videoRef.current) {
                         videoRef.current.pause();
                         setIsPlaying(false);
                     }
                 }
             },
-            { threshold: 0.2, rootMargin: '100px' } // Load slightly before it comes into view
+            { threshold: 0.2, rootMargin: '100px' }
         );
 
         if (containerRef.current) {
@@ -46,7 +40,18 @@ const VideoShowcase: React.FC = () => {
         }
 
         return () => observer.disconnect();
-    }, [isExpanded, shouldLoadVideo]);
+    }, [isExpanded]);
+
+    // Effect to Trigger Play once Video Element is Mounted
+    useEffect(() => {
+        if (shouldLoadVideo && videoRef.current && !isExpanded) {
+            // Ensure muted is set before playing to satisfy browser autoplay policies
+            videoRef.current.muted = true;
+            videoRef.current.play()
+                .then(() => setIsPlaying(true))
+                .catch((e) => console.log("Autoplay blocked/failed", e));
+        }
+    }, [shouldLoadVideo, isExpanded]);
 
     // Keyboard support (Escape to close)
     useEffect(() => {
