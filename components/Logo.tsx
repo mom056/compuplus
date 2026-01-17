@@ -11,18 +11,16 @@ export const Logo: React.FC<{ className?: string }> = ({ className = "w-10 h-10"
   if (!imgError) {
     return (
       <div className={`relative ${className}`}>
-        <div className={`relative ${className}`}>
-          <div className="relative w-full h-full">
-            <Image
-              src="/logo-sm.png"
-              alt="CompuPlus Logo"
-              className="object-contain filter drop-shadow-[0_0_8px_rgba(0,229,255,0.5)]"
-              fill
-              sizes="(max-width: 768px) 48px, 96px"
-              priority
-            />
-          </div>
-        </div>
+        <Image
+          src="/logo-sm.png"
+          alt="CompuPlus Logo"
+          width={128}
+          height={128}
+          quality={75}
+          className="object-contain drop-shadow-lg w-full h-full"
+          priority
+          onError={() => setImgError(true)}
+        />
       </div>
     );
   }
