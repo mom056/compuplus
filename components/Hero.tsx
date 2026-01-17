@@ -109,7 +109,7 @@ const Hero: React.FC = () => {
           <div className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start pt-4">
             <button
               onClick={scrollToContact}
-              className="group relative px-10 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold rounded-lg overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_30px_rgba(0,229,255,0.3)] shadow-lg shadow-cyan-500/20"
+              className="group relative px-10 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold rounded-lg overflow-hidden transition-all duration-200 hover:scale-105 hover:shadow-[0_0_30px_rgba(0,229,255,0.3)] shadow-lg shadow-cyan-500/20 active:scale-95"
             >
               <span className="relative z-10 flex items-center gap-3">
                 {ctaPrimary} <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
@@ -119,7 +119,7 @@ const Hero: React.FC = () => {
 
             <button
               onClick={scrollToPortfolio}
-              className="px-10 py-4 border border-violet-500/50 hover:border-violet-400 text-slate-700 dark:text-white rounded-lg hover:bg-violet-500/10 transition-all font-mono tracking-wide hover:scale-105"
+              className="px-10 py-4 border border-violet-500/50 hover:border-violet-400 text-slate-700 dark:text-white rounded-lg hover:bg-violet-500/10 transition-all duration-200 font-mono tracking-wide hover:scale-105 active:scale-95"
             >
               {ctaSecondary}
             </button>
