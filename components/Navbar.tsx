@@ -148,6 +148,7 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
             <button
               onClick={(e) => handleNavClick(e, '#contact')}
               className="px-6 py-2 border border-cyan-600/30 dark:border-cyan-400/30 text-cyan-700 dark:text-cyan-400 rounded hover:bg-cyan-600/10 dark:hover:bg-cyan-400/10 transition-all duration-300 uppercase text-xs tracking-widest font-bold"
+              aria-label="Get a Quote"
             >
               {content.nav.quote}
             </button>
@@ -210,6 +211,7 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
         <button
           onClick={(e) => handleNavClick(e, '#contact')}
           className="w-full py-4 bg-cyan-600 hover:bg-cyan-500 text-white rounded font-bold mt-4 shadow-lg transition-colors"
+          aria-label="Get a Quote"
         >
           {content.nav.quote}
         </button>
