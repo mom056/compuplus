@@ -1,7 +1,4 @@
-"use client";
-
 import Hero from '@/components/Hero';
-import { useApp } from './providers';
 import dynamic from 'next/dynamic';
 
 const Services = dynamic(() => import('@/components/Services'));

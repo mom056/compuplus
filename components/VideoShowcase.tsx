@@ -228,12 +228,14 @@ const VideoShowcase: React.FC = () => {
                         <button
                             onClick={togglePlayPause}
                             className="p-4 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-200 hover:scale-110"
+                            aria-label={isPlaying ? "Pause Video" : "Play Video"}
                         >
                             {isPlaying ? <Pause size={28} /> : <Play size={28} className="ml-1" />}
                         </button>
                         <button
                             onClick={toggleMute}
                             className="p-4 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-200 hover:scale-110"
+                            aria-label={isMuted ? "Unmute Video" : "Mute Video"}
                         >
                             {isMuted ? <VolumeX size={28} /> : <Volume2 size={28} />}
                         </button>
