@@ -29,8 +29,8 @@ const AIChatbot: React.FC = () => {
       >
         <div className="absolute inset-0 bg-cyan-500 rounded-full animate-ping opacity-20"></div>
         <div className="absolute inset-0 bg-violet-500 rounded-full animate-pulse opacity-20 delay-75"></div>
-        <div className="relative bg-gradient-to-br from-navy-900 to-slate-900 border border-cyan-500/50 text-cyan-400 p-4 rounded-full shadow-[0_0_20px_rgba(0,229,255,0.3)] hover:shadow-[0_0_30px_rgba(139,92,246,0.5)] hover:scale-110 transition-all flex items-center justify-center backdrop-blur-md">
-          <Bot size={32} className="animate-pulse-slow" />
+        <div className="relative bg-gradient-to-br from-navy-900 via-violet-900 to-slate-900 border border-cyan-500/50 text-cyan-400 p-4 rounded-full shadow-[0_0_25px_rgba(0,229,255,0.4)] hover:shadow-[0_0_40px_rgba(139,92,246,0.6)] hover:scale-110 transition-all flex items-center justify-center backdrop-blur-md">
+          <Bot size={28} className="animate-pulse-slow" />
 
           {/* Status Dot */}
           <span className="absolute top-0 right-0 flex h-3 w-3">

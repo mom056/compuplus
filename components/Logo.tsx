@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import React, { useState } from 'react';
 
 export const Logo: React.FC<{ className?: string }> = ({ className = "w-10 h-10" }) => {
   const [imgError, setImgError] = useState(false);
