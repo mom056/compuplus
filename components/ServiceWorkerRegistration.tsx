@@ -3,16 +3,18 @@
 import { useEffect } from 'react';
 
 // IMPORTANT: Increment this when you make breaking changes to sw.js
-const CURRENT_SW_VERSION = 'v5';
+const CURRENT_SW_VERSION = 'v6';
 
 export function ServiceWorkerRegistration() {
     useEffect(() => {
         if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
             const storedVersion = localStorage.getItem('sw-version');
 
-            // If version mismatch, force unregister all SWs and clear caches
-            if (storedVersion && storedVersion !== CURRENT_SW_VERSION) {
-                console.log(`SW version mismatch: ${storedVersion} → ${CURRENT_SW_VERSION}. Forcing refresh...`);
+            // Force refresh if version mismatch OR if no version stored (legacy users)
+            const needsRefresh = storedVersion !== CURRENT_SW_VERSION;
+
+            if (needsRefresh) {
+                console.log(`SW refresh needed: ${storedVersion || 'none'} → ${CURRENT_SW_VERSION}`);
 
                 // Unregister all service workers
                 navigator.serviceWorker.getRegistrations().then((registrations) => {
