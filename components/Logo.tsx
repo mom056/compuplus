@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Image from 'next/image';
+import React, { useState } from 'react';
 
 export const Logo: React.FC<{ className?: string }> = ({ className = "w-10 h-10" }) => {
   const [imgError, setImgError] = useState(false);
@@ -11,14 +11,15 @@ export const Logo: React.FC<{ className?: string }> = ({ className = "w-10 h-10"
   if (!imgError) {
     return (
       <div className={`relative ${className}`}>
-        <Image
-          src="/logo.png"
-          alt="CompuPlus Logo"
-          fill
-          className="object-contain filter drop-shadow-[0_0_8px_rgba(0,229,255,0.5)]"
-          onError={() => setImgError(true)}
-          priority // Critical for LCP as it's in Navbar
-        />
+        <div className={`relative ${className}`}>
+          <img
+            src="/logo-sm.png"
+            alt="CompuPlus Logo"
+            className="w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(0,229,255,0.5)]"
+            width={128}
+            height={128}
+          />
+        </div>
       </div>
     );
   }
