@@ -1,4 +1,4 @@
-const CACHE_NAME = 'compuplus-v4';
+const CACHE_NAME = 'compuplus-v5';
 const urlsToCache = [
     '/',
     '/logo-sm.png',
@@ -9,10 +9,7 @@ const urlsToCache = [
 self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME)
-            .then((cache) => {
-                // console.log('Opened cache');
-                return cache.addAll(urlsToCache);
-            })
+            .then((cache) => cache.addAll(urlsToCache))
     );
     self.skipWaiting();
 });
@@ -33,41 +30,40 @@ self.addEventListener('activate', (event) => {
     self.clients.claim();
 });
 
-// Fetch event - Network First for HTML, Cache First for assets
+// Fetch event - ONLY handle same-origin requests, skip all third-party
 self.addEventListener('fetch', (event) => {
-    // Strategy: Network First for navigation (HTML), Cache First for others
+    const url = new URL(event.request.url);
+
+    // CRITICAL: Skip ALL third-party requests - let them go directly to the network
+    // This prevents CSP issues with Cloudinary, TransparentTextures, Google Fonts, etc.
+    if (url.origin !== self.location.origin) {
+        return; // Do nothing, browser will fetch normally
+    }
+
+    // Only handle same-origin requests below
     if (event.request.mode === 'navigate') {
+        // Network First for HTML navigation
         event.respondWith(
             fetch(event.request)
                 .then((response) => {
-                    // Update cache with new version
                     const responseToCache = response.clone();
                     caches.open(CACHE_NAME).then((cache) => {
                         cache.put(event.request, responseToCache);
                     });
                     return response;
                 })
-                .catch(() => {
-                    // Fallback to cache if offline
-                    return caches.match(event.request);
-                })
+                .catch(() => caches.match(event.request))
         );
     } else {
-        // Cache First for assets
+        // Cache First for same-origin assets
         event.respondWith(
             caches.match(event.request)
                 .then((response) => {
-                    if (response) {
-                        return response;
-                    }
-                    if (!event.request.url.startsWith('http')) {
-                        return fetch(event.request);
-                    }
-                    const fetchRequest = event.request.clone();
-                    return fetch(fetchRequest).then((response) => {
-                        if (!response || response.status !== 200 || response.type !== 'basic') {
-                            return response;
-                        }
+                    if (response) return response;
+
+                    return fetch(event.request.clone()).then((response) => {
+                        if (!response || response.status !== 200) return response;
+
                         const responseToCache = response.clone();
                         caches.open(CACHE_NAME).then((cache) => {
                             cache.put(event.request, responseToCache);
