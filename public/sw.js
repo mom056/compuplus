@@ -40,6 +40,11 @@ self.addEventListener('fetch', (event) => {
         return; // Do nothing, browser will fetch normally
     }
 
+    // SKIP POST requests - they cannot be cached
+    if (event.request.method !== 'GET') {
+        return; // Let POST, PUT, DELETE, etc. go directly to network
+    }
+
     // Only handle same-origin requests below
     if (event.request.mode === 'navigate') {
         // Network First for HTML navigation
