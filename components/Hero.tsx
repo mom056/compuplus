@@ -126,10 +126,12 @@ const Hero: React.FC = () => {
           </div>
         </div>
 
-        {/* Right: 3D Visualization */}
-        <Reveal delay={0.2} direction="left" className="block relative z-20 mt-10 lg:mt-0">
-          <Hero3D />
-        </Reveal>
+        {/* Right: 3D Visualization - Hidden on Mobile for Performance */}
+        <div className="hidden lg:block relative z-20 mt-10 lg:mt-0">
+          <Reveal delay={0.2} direction="left">
+            <Hero3D />
+          </Reveal>
+        </div>
 
       </div>
 
