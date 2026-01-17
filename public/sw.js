@@ -1,4 +1,4 @@
-const CACHE_NAME = 'compuplus-v3';
+const CACHE_NAME = 'compuplus-v4';
 const urlsToCache = [
     '/',
     '/logo-sm.png',
@@ -10,7 +10,7 @@ self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then((cache) => {
-                console.log('Opened cache');
+                // console.log('Opened cache');
                 return cache.addAll(urlsToCache);
             })
     );
@@ -33,40 +33,48 @@ self.addEventListener('activate', (event) => {
     self.clients.claim();
 });
 
-// Fetch event - serve from cache, fallback to network
+// Fetch event - Network First for HTML, Cache First for assets
 self.addEventListener('fetch', (event) => {
-    event.respondWith(
-        caches.match(event.request)
-            .then((response) => {
-                // Cache hit - return response
-                if (response) {
+    // Strategy: Network First for navigation (HTML), Cache First for others
+    if (event.request.mode === 'navigate') {
+        event.respondWith(
+            fetch(event.request)
+                .then((response) => {
+                    // Update cache with new version
+                    const responseToCache = response.clone();
+                    caches.open(CACHE_NAME).then((cache) => {
+                        cache.put(event.request, responseToCache);
+                    });
                     return response;
-                }
-
-                // Skip caching for non-http schemes (e.g., chrome-extension://)
-                if (!event.request.url.startsWith('http')) {
-                    return fetch(event.request);
-                }
-
-                // Clone the request
-                const fetchRequest = event.request.clone();
-
-                return fetch(fetchRequest).then((response) => {
-                    // Check if valid response
-                    if (!response || response.status !== 200 || response.type !== 'basic') {
+                })
+                .catch(() => {
+                    // Fallback to cache if offline
+                    return caches.match(event.request);
+                })
+        );
+    } else {
+        // Cache First for assets
+        event.respondWith(
+            caches.match(event.request)
+                .then((response) => {
+                    if (response) {
                         return response;
                     }
-
-                    // Clone the response
-                    const responseToCache = response.clone();
-
-                    caches.open(CACHE_NAME)
-                        .then((cache) => {
+                    if (!event.request.url.startsWith('http')) {
+                        return fetch(event.request);
+                    }
+                    const fetchRequest = event.request.clone();
+                    return fetch(fetchRequest).then((response) => {
+                        if (!response || response.status !== 200 || response.type !== 'basic') {
+                            return response;
+                        }
+                        const responseToCache = response.clone();
+                        caches.open(CACHE_NAME).then((cache) => {
                             cache.put(event.request, responseToCache);
                         });
-
-                    return response;
-                });
-            })
-    );
+                        return response;
+                    });
+                })
+        );
+    }
 });
