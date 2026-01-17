@@ -159,12 +159,12 @@ const VideoShowcase: React.FC = () => {
                 )}
 
                 {/* Video Element - LAZY LOADED */}
-                {/* Only render the video tag if it's expanded to save 8MB+ on initial load */}
-                {isExpanded ? (
+                {/* Render video if expanded OR if it should load (scrolled into view) */}
+                {(isExpanded || shouldLoadVideo) ? (
                     <video
                         ref={videoRef}
-                        className="w-full h-full object-contain transition-all duration-500 ease-out"
-                        autoPlay
+                        className={`w-full h-full transition-all duration-500 ease-out ${isExpanded ? 'object-contain' : 'object-cover rounded-[2rem]'}`}
+                        autoPlay={isExpanded}
                         controls={false}
                         muted={isMuted}
                         loop
