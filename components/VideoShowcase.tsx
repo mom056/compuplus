@@ -159,13 +159,11 @@ const VideoShowcase: React.FC = () => {
                 )}
 
                 {/* Video Element - LAZY LOADED */}
-                {/* Only render the video tag if it's expanded to save 8MB+ on initial load */}
-                {isExpanded ? (
+                {/* Render video if expanded OR if it should load (scrolled into view) */}
+                {(isExpanded || shouldLoadVideo) ? (
                     <video
                         ref={videoRef}
-                        className="w-full h-full object-contain transition-all duration-500 ease-out"
-                        autoPlay
-                        controls={false}
+                        className={`w-full h-full object-cover transition-all duration-500 ease-out ${!isExpanded ? 'rounded-[2rem]' : ''}`}
                         muted={isMuted}
                         loop
                         playsInline
@@ -174,11 +172,10 @@ const VideoShowcase: React.FC = () => {
                         <source src="https://res.cloudinary.com/dmwdt7bcu/video/upload/q_auto,vc_auto/v1767910353/Video-2_hbb5me.mp4" type="video/mp4" />
                     </video>
                 ) : (
-                    /* Facade (Image Poster) - Extremely lightweight */
+                    /* Facade (Image Poster) - Show until video is requested */
                     <div className={`w-full h-full relative overflow-hidden rounded-[2rem] transition-all duration-500 ease-out ${isHovered ? 'scale-105' : 'scale-100'}`}>
                         <div className="absolute inset-0 bg-slate-900 flex items-center justify-center">
-                            {/* Simple abstract background instead of heavy image if no poster available, 
-                                but here constructing a gradient/tech look matching the site */}
+                            {/* Simple abstract background */}
                             <div className="absolute inset-0 bg-gradient-to-br from-slate-900 to-navy-950" />
                             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(6,182,212,0.1),transparent_70%)]" />
 
