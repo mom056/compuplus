@@ -35,7 +35,7 @@ const nextConfig = {
               "font-src 'self' https://fonts.gstatic.com",
               "img-src 'self' data: blob: https://images.unsplash.com https://res.cloudinary.com https://www.transparenttextures.com",
               "media-src 'self' https://res.cloudinary.com",
-              "connect-src 'self' https://generativelanguage.googleapis.com https://www.transparenttextures.com",
+              "connect-src 'self' https://generativelanguage.googleapis.com https://www.transparenttextures.com https://res.cloudinary.com",
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'",

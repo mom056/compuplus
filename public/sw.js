@@ -1,4 +1,4 @@
-const CACHE_NAME = 'compuplus-v2';
+const CACHE_NAME = 'compuplus-v3';
 const urlsToCache = [
     '/',
     '/logo-sm.png',
