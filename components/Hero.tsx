@@ -69,9 +69,9 @@ const Hero: React.FC = () => {
       <div className="absolute inset-0 bg-gradient-to-br from-cyan-50/30 via-white/40 to-violet-50/30 dark:from-navy-950/80 dark:via-navy-900/80 dark:to-violet-950/20 transition-colors duration-700" />
 
       {/* Moving Blobs - Reduced on mobile for performance */}
-      <div className="absolute top-[5%] left-[5%] w-[200px] h-[200px] md:w-[400px] md:h-[400px] bg-gradient-to-br from-violet-400 to-fuchsia-300 dark:from-violet-600/30 dark:to-fuchsia-600/20 rounded-full filter blur-[40px] md:blur-[60px] opacity-50 dark:opacity-30 transform-gpu pointer-events-none" />
-      <div className="absolute bottom-[10%] right-[5%] w-[200px] h-[200px] md:w-[450px] md:h-[450px] bg-gradient-to-br from-cyan-400 to-blue-300 dark:from-cyan-500/30 dark:to-blue-500/20 rounded-full filter blur-[40px] md:blur-[60px] opacity-50 dark:opacity-30 transform-gpu pointer-events-none" />
-      <div className="absolute top-[40%] left-[30%] w-[300px] h-[300px] bg-gradient-to-br from-pink-300 to-rose-200 dark:from-pink-600/25 dark:to-rose-600/15 rounded-full filter blur-[50px] opacity-40 dark:opacity-20 transform-gpu pointer-events-none hidden lg:block" />
+      <div className="absolute top-[5%] left-[5%] w-[200px] h-[200px] md:w-[400px] md:h-[400px] bg-gradient-to-br from-violet-400 to-fuchsia-300 dark:from-violet-600/30 dark:to-fuchsia-600/20 rounded-full filter blur-[40px] md:blur-[60px] opacity-50 dark:opacity-30 transform-gpu will-change-transform pointer-events-none" />
+      <div className="absolute bottom-[10%] right-[5%] w-[200px] h-[200px] md:w-[450px] md:h-[450px] bg-gradient-to-br from-cyan-400 to-blue-300 dark:from-cyan-500/30 dark:to-blue-500/20 rounded-full filter blur-[40px] md:blur-[60px] opacity-50 dark:opacity-30 transform-gpu will-change-transform pointer-events-none" />
+      <div className="absolute top-[40%] left-[30%] w-[300px] h-[300px] bg-gradient-to-br from-pink-300 to-rose-200 dark:from-pink-600/25 dark:to-rose-600/15 rounded-full filter blur-[50px] opacity-40 dark:opacity-20 transform-gpu will-change-transform pointer-events-none hidden lg:block" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
 
