@@ -140,21 +140,36 @@ const VideoShowcase: React.FC = () => {
                     <div className="absolute inset-4 bg-gradient-to-r from-cyan-500 to-violet-600 blur-[80px] opacity-30 group-hover:opacity-50 transition-opacity duration-500 animate-pulse-slow -z-10" />
                 )}
 
-                {/* Video Element */}
-                <video
-                    ref={videoRef}
-                    className={`w-full h-full transition-all duration-500 ease-out
-                        ${isExpanded ? 'object-contain' : 'object-cover'}
-                        ${!isExpanded && isHovered ? 'scale-105' : 'scale-100'}`}
-                    muted
-                    loop
-                    playsInline
-                    preload="metadata"
-                    poster="/logo-sm.png" // Use logo as temporary poster to avoid empty black box
-                    onClick={(e) => { if (isExpanded) { e.stopPropagation(); togglePlayPause(); } }}
-                >
-                    <source src="https://res.cloudinary.com/dmwdt7bcu/video/upload/q_auto,vc_auto/v1767910353/Video-2_hbb5me.mp4" type="video/mp4" />
-                </video>
+                {/* Video Element - LAZY LOADED */}
+                {/* Only render the video tag if it's expanded to save 8MB+ on initial load */}
+                {isExpanded ? (
+                    <video
+                        ref={videoRef}
+                        className="w-full h-full object-contain transition-all duration-500 ease-out"
+                        autoPlay
+                        controls={false}
+                        muted={isMuted}
+                        loop
+                        playsInline
+                        onClick={(e) => { e.stopPropagation(); togglePlayPause(); }}
+                    >
+                        <source src="https://res.cloudinary.com/dmwdt7bcu/video/upload/q_auto,vc_auto/v1767910353/Video-2_hbb5me.mp4" type="video/mp4" />
+                    </video>
+                ) : (
+                    /* Facade (Image Poster) - Extremely lightweight */
+                    <div className={`w-full h-full relative overflow-hidden rounded-[2rem] transition-all duration-500 ease-out ${isHovered ? 'scale-105' : 'scale-100'}`}>
+                        <div className="absolute inset-0 bg-slate-900 flex items-center justify-center">
+                            {/* Simple abstract background instead of heavy image if no poster available, 
+                                but here constructing a gradient/tech look matching the site */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-slate-900 to-navy-950" />
+                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(6,182,212,0.1),transparent_70%)]" />
+
+                            {/* Tech Circle Decoration */}
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] border border-cyan-500/10 rounded-full animate-pulse-slow" />
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200px] h-[200px] border border-violet-500/10 rounded-full" />
+                        </div>
+                    </div>
+                )}
 
                 {/* Holographic Scanline Overlay (Bezel) */}
                 <div className={`absolute inset-0 border-[2px] border-white/5 rounded-[2rem] z-20 pointer-events-none transition-opacity duration-300 ${isExpanded ? 'opacity-0' : 'opacity-100'}`}>

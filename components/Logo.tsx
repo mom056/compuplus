@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Image from 'next/image';
 
 export const Logo: React.FC<{ className?: string }> = ({ className = "w-10 h-10" }) => {
   const [imgError, setImgError] = useState(false);
@@ -11,13 +12,16 @@ export const Logo: React.FC<{ className?: string }> = ({ className = "w-10 h-10"
     return (
       <div className={`relative ${className}`}>
         <div className={`relative ${className}`}>
-          <img
-            src="/logo-sm.png"
-            alt="CompuPlus Logo"
-            className="w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(0,229,255,0.5)]"
-            width={128}
-            height={128}
-          />
+          <div className="relative w-full h-full">
+            <Image
+              src="/logo-sm.png"
+              alt="CompuPlus Logo"
+              className="object-contain filter drop-shadow-[0_0_8px_rgba(0,229,255,0.5)]"
+              fill
+              sizes="(max-width: 768px) 48px, 96px"
+              priority
+            />
+          </div>
         </div>
       </div>
     );

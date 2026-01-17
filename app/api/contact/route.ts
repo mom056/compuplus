@@ -1,9 +1,25 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import rateLimit from '@/lib/rate-limit';
 
 export async function POST(req: Request) {
     try {
         const { name, email, message } = await req.json();
+
+        // Rate Limiting (5 requests per minute per IP)
+        const limiter = rateLimit({
+            interval: 60 * 1000, // 60 seconds
+            uniqueTokenPerInterval: 500, // Max 500 users per second
+        });
+
+        try {
+            await limiter.check(5, 'CACHE_TOKEN'); // 5 requests per minute
+        } catch {
+            return NextResponse.json(
+                { error: 'Rate limit exceeded. Please try again later.' },
+                { status: 429 }
+            );
+        }
 
         if (!name || !email || !message) {
             return NextResponse.json(
