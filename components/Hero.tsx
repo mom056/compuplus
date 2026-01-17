@@ -90,8 +90,15 @@ const Hero: React.FC = () => {
           </div>
 
           {/* Title - Animated with Typing Effect */}
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.15] text-slate-900 dark:text-white tracking-tight min-h-[100px] md:min-h-[140px]">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-cyan-600 to-violet-600 dark:from-white dark:via-cyan-400 dark:to-violet-400">
+          {/* Title - Animated with Typing Effect - CLS OPTIMIZED */}
+          {/* We render a hidden copy of the text to reserve vertical space (Fixing CLS) */}
+          {/* The animated text is absolutely positioned over it */}
+          <h1 className="relative text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.15] text-slate-900 dark:text-white tracking-tight">
+            {/* Invisible placeholder for Layout Stability */}
+            <span className="invisible select-none" aria-hidden="true">{title}</span>
+
+            {/* Actual Animated Text Overlay */}
+            <span className="absolute inset-0 top-0 left-0 text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-cyan-600 to-violet-600 dark:from-white dark:via-cyan-400 dark:to-violet-400">
               <motion.span>{displayText}</motion.span>
               <motion.span
                 animate={{ opacity: [0, 1, 0] }}

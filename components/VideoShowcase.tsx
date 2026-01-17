@@ -14,21 +14,31 @@ const VideoShowcase: React.FC = () => {
     const [isHovered, setIsHovered] = React.useState(false);
     const [isMuted, setIsMuted] = React.useState(true);
     const [showControls, setShowControls] = React.useState(false);
-    const [isIntro, setIsIntro] = React.useState(false);
+    // Smart Autoplay State: Only load the heavy video source when the component is close to the viewport
+    const [shouldLoadVideo, setShouldLoadVideo] = React.useState(false);
 
-    // Initial Autoplay via Intersection Observer (Muted)
+    // Smart Lazy Loading & Autoplay Observer
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
                 const entry = entries[0];
-                if (entry.isIntersecting && videoRef.current && !isExpanded) {
-                    videoRef.current.muted = true;
-                    videoRef.current.play().catch(() => { });
-                } else if (!entry.isIntersecting && videoRef.current && !isExpanded) {
-                    videoRef.current.pause();
+                if (entry.isIntersecting) {
+                    setShouldLoadVideo(true); // Load video resource
+                    // If video is loaded and ready, play it
+                    if (videoRef.current && !isExpanded) {
+                        videoRef.current.muted = true;
+                        videoRef.current.play().catch(() => { });
+                        setIsPlaying(true);
+                    }
+                } else if (!entry.isIntersecting && !isExpanded) {
+                    // Pause if scrolled away and not expanded to save resources
+                    if (videoRef.current) {
+                        videoRef.current.pause();
+                        setIsPlaying(false);
+                    }
                 }
             },
-            { threshold: 0.3 }
+            { threshold: 0.2, rootMargin: '100px' } // Load slightly before it comes into view
         );
 
         if (containerRef.current) {
@@ -36,7 +46,7 @@ const VideoShowcase: React.FC = () => {
         }
 
         return () => observer.disconnect();
-    }, [isExpanded]);
+    }, [isExpanded, shouldLoadVideo]);
 
     // Keyboard support (Escape to close)
     useEffect(() => {
@@ -64,16 +74,7 @@ const VideoShowcase: React.FC = () => {
         return () => { document.body.style.overflow = ''; };
     }, [isExpanded]);
 
-    // Handle playback when expanded AND intro is finished
-    useEffect(() => {
-        if (isExpanded && !isIntro && videoRef.current) {
-            videoRef.current.muted = false;
-            videoRef.current.currentTime = 0;
-            videoRef.current.play()
-                .then(() => setIsPlaying(true))
-                .catch(err => console.log('Playback failed', err));
-        }
-    }, [isExpanded, isIntro]);
+
 
     const openVideo = useCallback(() => {
         if (!containerRef.current) return;
@@ -84,13 +85,11 @@ const VideoShowcase: React.FC = () => {
         // Small delay to allow scroll to complete before expanding
         setTimeout(() => {
             setIsExpanded(true);
-            setIsIntro(true); // Start Intro
             setIsMuted(false);
-
-            // Intro Duration (2.5 seconds)
-            setTimeout(() => {
-                setIsIntro(false);
-            }, 2500);
+            if (videoRef.current) {
+                videoRef.current.muted = false;
+                videoRef.current.currentTime = 0;
+            }
         }, 300);
     }, []);
 
@@ -147,26 +146,7 @@ const VideoShowcase: React.FC = () => {
                         : 'w-full max-w-[95%] h-[400px] md:h-[70vh] rounded-[2rem] border border-cyan-500/20 shadow-[0_0_60px_rgba(0,229,255,0.1)] cursor-pointer hover:shadow-[0_0_100px_rgba(139,92,246,0.25)] hover:scale-[1.01]'
                     }`}
             >
-                {/* INTRO OVERLAY */}
-                {isExpanded && isIntro && (
-                    <div className="absolute inset-0 z-50 bg-black flex flex-col items-center justify-center font-mono">
-                        <div className="relative">
-                            <div className="w-24 h-24 border-4 border-cyan-500/30 rounded-full animate-spin-slow border-t-cyan-400" />
-                            <div className="absolute inset-0 flex items-center justify-center">
-                                <div className="w-16 h-16 bg-cyan-500/20 rounded-full animate-pulse" />
-                            </div>
-                        </div>
-                        <div className="mt-8 text-2xl font-bold tracking-widest text-cyan-400 animate-pulse">
-                            INITIALIZING SYSTEM
-                        </div>
-                        <div className="mt-2 text-xs text-cyan-600/70 tracking-[0.5em]">
-                            LOADING ASSETS... 99%
-                        </div>
 
-                        {/* Scanline effect */}
-                        <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(transparent_50%,rgba(0,0,0,0.5)_50%)] bg-[length:100%_4px]" />
-                    </div>
-                )}
 
                 {/* Ambilight Glow (Behind) */}
                 {!isExpanded && (
