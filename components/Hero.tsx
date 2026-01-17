@@ -1,10 +1,11 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { useApp } from '@/app/providers';
 import { Reveal } from './Reveal';
 import dynamic from 'next/dynamic';
+import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 
 // Dynamically import Hero3D with reduced loading weight
 const Hero3D = dynamic(() => import('./Hero3D'), {
@@ -36,6 +37,21 @@ const Hero: React.FC = () => {
   const ctaPrimary = content?.hero?.ctaPrimary || DEFAULTS.ctaPrimary;
   const ctaSecondary = content?.hero?.ctaSecondary || DEFAULTS.ctaSecondary;
   const scroll = content?.hero?.scroll || DEFAULTS.scroll;
+
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, (latest) => Math.round(latest));
+  const displayText = useTransform(rounded, (latest) => title.slice(0, latest));
+
+  useEffect(() => {
+    count.set(0);
+    const controls = animate(count, title.length, {
+      type: "tween",
+      duration: 3,
+      ease: "easeInOut",
+      delay: 0.5,
+    });
+    return controls.stop;
+  }, [title]);
 
   const scrollToContact = () => {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
@@ -72,10 +88,15 @@ const Hero: React.FC = () => {
             </span>
           </div>
 
-          {/* Title - SSR with fallback */}
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.2] text-slate-900 dark:text-white tracking-tight">
+          {/* Title - Animated with Typing Effect */}
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.2] text-slate-900 dark:text-white tracking-tight min-h-[120px] md:min-h-[160px]">
             <span className="inline text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-cyan-500 to-violet-600 dark:from-white dark:via-cyan-400 dark:to-violet-400 animate-gradient-x">
-              {title}
+              <motion.span>{displayText}</motion.span>
+              <motion.span
+                animate={{ opacity: [0, 1, 0] }}
+                transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
+                className="inline-block w-[4px] h-[1em] bg-violet-600 dark:bg-violet-400 ml-1 align-middle"
+              />
             </span>
           </h1>
 
