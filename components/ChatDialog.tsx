@@ -130,7 +130,7 @@ const ChatDialog: React.FC<ChatDialogProps> = ({ isOpen, onClose }) => {
             }
 
         } catch (error) {
-            console.error("Chat error", error);
+            // Error handled via UI
             setMessages(prev => [...prev, {
                 role: 'model',
                 text: lang === 'ar'

@@ -30,7 +30,7 @@ const Clients: React.FC = () => {
                     setClients(data.clients);
                 }
             } catch (error) {
-                console.error('Failed to fetch clients', error);
+                // Silently handle error in production
             }
         };
 

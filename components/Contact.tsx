@@ -61,7 +61,7 @@ const Contact: React.FC = () => {
         alert(lang === 'ar' ? 'فشل إرسال الرسالة. حاول مرة أخرى.' : 'Failed to send. Please try again.');
       }
     } catch (error) {
-      console.error('Submission error:', error);
+      // Error handled via alert
       alert(lang === 'ar' ? 'حدث خطأ. حاول مرة أخرى.' : 'Something went wrong.');
     } finally {
       setIsSubmitting(false);

@@ -15,6 +15,7 @@ const cairo = Cairo({ subsets: ['arabic', 'latin'], variable: '--font-cairo', di
 const firaCode = Fira_Code({ subsets: ['latin'], variable: '--font-fira-code', display: 'swap' });
 
 export const metadata: Metadata = {
+    metadataBase: new URL('https://compuplus.cc'),
     title: 'CompuPlus | Engineering the Future',
     description: 'A unified technology powerhouse providing turnkey solutions: Network Infrastructure, Odoo ERP Implementation, Custom Software, and Security Systems.',
     keywords: 'CompuPlus, Networking, Odoo ERP, Software Development, Data Centers, CCTV, Egypt, Tech Solutions',
