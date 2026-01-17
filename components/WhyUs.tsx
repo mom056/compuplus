@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useEffect, useState, useRef } from 'react';
 import { STATS } from '../constants';
 import { ShieldCheck, Zap, Server, Activity, ArrowUpRight } from 'lucide-react';

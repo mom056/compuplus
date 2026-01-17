@@ -159,11 +159,13 @@ const VideoShowcase: React.FC = () => {
                 )}
 
                 {/* Video Element - LAZY LOADED */}
-                {/* Render video if expanded OR if it should load (scrolled into view) */}
-                {(isExpanded || shouldLoadVideo) ? (
+                {/* Only render the video tag if it's expanded to save 8MB+ on initial load */}
+                {isExpanded ? (
                     <video
                         ref={videoRef}
-                        className={`w-full h-full object-cover transition-all duration-500 ease-out ${!isExpanded ? 'rounded-[2rem]' : ''}`}
+                        className="w-full h-full object-contain transition-all duration-500 ease-out"
+                        autoPlay
+                        controls={false}
                         muted={isMuted}
                         loop
                         playsInline
@@ -172,10 +174,11 @@ const VideoShowcase: React.FC = () => {
                         <source src="https://res.cloudinary.com/dmwdt7bcu/video/upload/q_auto,vc_auto/v1767910353/Video-2_hbb5me.mp4" type="video/mp4" />
                     </video>
                 ) : (
-                    /* Facade (Image Poster) - Show until video is requested */
+                    /* Facade (Image Poster) - Extremely lightweight */
                     <div className={`w-full h-full relative overflow-hidden rounded-[2rem] transition-all duration-500 ease-out ${isHovered ? 'scale-105' : 'scale-100'}`}>
                         <div className="absolute inset-0 bg-slate-900 flex items-center justify-center">
-                            {/* Simple abstract background */}
+                            {/* Simple abstract background instead of heavy image if no poster available, 
+                                but here constructing a gradient/tech look matching the site */}
                             <div className="absolute inset-0 bg-gradient-to-br from-slate-900 to-navy-950" />
                             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(6,182,212,0.1),transparent_70%)]" />
 
@@ -228,14 +231,12 @@ const VideoShowcase: React.FC = () => {
                         <button
                             onClick={togglePlayPause}
                             className="p-4 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-200 hover:scale-110"
-                            aria-label={isPlaying ? "Pause Video" : "Play Video"}
                         >
                             {isPlaying ? <Pause size={28} /> : <Play size={28} className="ml-1" />}
                         </button>
                         <button
                             onClick={toggleMute}
                             className="p-4 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-200 hover:scale-110"
-                            aria-label={isMuted ? "Unmute Video" : "Mute Video"}
                         >
                             {isMuted ? <VolumeX size={28} /> : <Volume2 size={28} />}
                         </button>

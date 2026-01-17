@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useRef } from 'react';
 import { TIMELINE } from '../constants';
 import { useApp } from '@/app/providers';
