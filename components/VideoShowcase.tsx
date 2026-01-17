@@ -63,8 +63,19 @@ const VideoShowcase: React.FC = () => {
         return () => { document.body.style.overflow = ''; };
     }, [isExpanded]);
 
+    // Handle playback when expanded
+    useEffect(() => {
+        if (isExpanded && videoRef.current) {
+            videoRef.current.muted = false;
+            videoRef.current.currentTime = 0;
+            videoRef.current.play()
+                .then(() => setIsPlaying(true))
+                .catch(err => console.log('Playback failed', err));
+        }
+    }, [isExpanded]);
+
     const openVideo = useCallback(() => {
-        if (!videoRef.current || !containerRef.current) return;
+        if (!containerRef.current) return;
 
         // Scroll to video first (smooth scroll to center)
         containerRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -73,12 +84,6 @@ const VideoShowcase: React.FC = () => {
         setTimeout(() => {
             setIsExpanded(true);
             setIsMuted(false);
-            if (videoRef.current) {
-                videoRef.current.muted = false;
-                videoRef.current.currentTime = 0;
-                videoRef.current.play();
-            }
-            setIsPlaying(true);
         }, 300);
     }, []);
 
