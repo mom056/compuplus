@@ -100,7 +100,9 @@ export default function RootLayout({
     return (
         <html lang="en" className="scroll-smooth">
             <head>
-                {/* Preconnect to critical third-party origins */}
+                {/* Preconnect to critical third-party origins for faster LCP */}
+                <link rel="preconnect" href="https://images.unsplash.com" />
+                <link rel="dns-prefetch" href="https://images.unsplash.com" />
                 <link rel="preconnect" href="https://www.transparenttextures.com" />
                 <link rel="dns-prefetch" href="https://www.transparenttextures.com" />
                 <script
