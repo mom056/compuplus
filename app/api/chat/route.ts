@@ -1,5 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { SYSTEM_PROMPT } from "@/constants/chatbot";
 
 // Rate limiting: Simple in-memory store (for production, use Redis)
@@ -33,19 +33,28 @@ export async function POST(request: NextRequest) {
 
         // Check rate limit
         if (isRateLimited(ip)) {
-            return new Response(
-                JSON.stringify({ error: "Rate limit exceeded. Please wait a moment." }),
-                { status: 429, headers: { "Content-Type": "application/json" } }
+            return NextResponse.json(
+                { error: "Rate limit exceeded. Please wait a moment." },
+                { status: 429 }
             );
         }
 
-        const body = await request.json();
+        let body;
+        try {
+            body = await request.json();
+        } catch {
+            return NextResponse.json(
+                { error: "Invalid JSON body" },
+                { status: 400 }
+            );
+        }
+
         const { message, history = [] } = body;
 
         if (!message || typeof message !== "string") {
-            return new Response(
-                JSON.stringify({ error: "Message is required" }),
-                { status: 400, headers: { "Content-Type": "application/json" } }
+            return NextResponse.json(
+                { error: "Message is required" },
+                { status: 400 }
             );
         }
 
@@ -53,26 +62,35 @@ export async function POST(request: NextRequest) {
         const apiKey = process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_API_KEY;
 
         if (!apiKey) {
-            console.error("Missing API key");
-            return new Response(
-                JSON.stringify({ error: "Service temporarily unavailable" }),
-                { status: 503, headers: { "Content-Type": "application/json" } }
+            console.error("[Chat API] Missing API key - GEMINI_API_KEY or NEXT_PUBLIC_API_KEY not set");
+            return NextResponse.json(
+                { error: "Service configuration error" },
+                { status: 503 }
             );
         }
 
+        console.log("[Chat API] Initializing with key:", apiKey.substring(0, 10) + "...");
+
         const ai = new GoogleGenAI({ apiKey });
+
+        // Format history for Gemini
+        const formattedHistory = history
+            .filter((msg: { role: string; text: string }) => msg.text && msg.text.length > 0)
+            .map((msg: { role: string; text: string }) => ({
+                role: msg.role === "user" ? "user" : "model",
+                parts: [{ text: msg.text }],
+            }));
+
+        console.log("[Chat API] Creating chat with", formattedHistory.length, "history messages");
 
         // Create chat with history
         const chat = ai.chats.create({
             model: "gemini-2.0-flash-exp",
             config: {
                 systemInstruction: SYSTEM_PROMPT,
-                temperature: 0.6, // Slightly lower for more consistent answers
+                temperature: 0.6,
             },
-            history: history.map((msg: { role: string; text: string }) => ({
-                role: msg.role === "user" ? "user" : "model",
-                parts: [{ text: msg.text }],
-            })),
+            history: formattedHistory,
         });
 
         // Get streaming response
@@ -92,9 +110,12 @@ export async function POST(request: NextRequest) {
                     }
                     controller.enqueue(encoder.encode("data: [DONE]\n\n"));
                     controller.close();
-                } catch (error) {
-                    console.error("Stream error:", error);
-                    controller.error(error);
+                } catch (streamError) {
+                    console.error("[Chat API] Stream error:", streamError);
+                    controller.enqueue(
+                        encoder.encode(`data: ${JSON.stringify({ error: "Stream interrupted" })}\n\n`)
+                    );
+                    controller.close();
                 }
             },
         });
@@ -102,16 +123,30 @@ export async function POST(request: NextRequest) {
         return new Response(readable, {
             headers: {
                 "Content-Type": "text/event-stream",
-                "Cache-Control": "no-cache",
+                "Cache-Control": "no-cache, no-transform",
                 "Connection": "keep-alive",
+                "X-Accel-Buffering": "no",
             },
         });
 
     } catch (error) {
-        console.error("Chat API error:", error);
-        return new Response(
-            JSON.stringify({ error: "Failed to process request" }),
-            { status: 500, headers: { "Content-Type": "application/json" } }
+        console.error("[Chat API] Fatal error:", error);
+        const errorMessage = error instanceof Error ? error.message : "Unknown error";
+        return NextResponse.json(
+            { error: "Failed to process request", details: errorMessage },
+            { status: 500 }
         );
     }
+}
+
+// Handle OPTIONS for CORS
+export async function OPTIONS() {
+    return new Response(null, {
+        status: 200,
+        headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "POST, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type",
+        },
+    });
 }
