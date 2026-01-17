@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import { Code, Database, Globe, Lock, Server, Cloud, Cpu, Smartphone, Zap } from 'lucide-react';
 import { useApp } from '@/app/providers';

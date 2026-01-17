@@ -12,10 +12,7 @@ const CTA = dynamic(() => import('@/components/CTA'));
 const Contact = dynamic(() => import('@/components/Contact'));
 
 // VideoShowcase is heavy and interactive, strictly client-side
-const VideoShowcase = dynamic(() => import('@/components/VideoShowcase'), {
-    ssr: false,
-    loading: () => <div className="h-screen bg-black animate-pulse" />
-});
+const VideoShowcase = dynamic(() => import('@/components/VideoShowcase'));
 
 export default function Home() {
     return (

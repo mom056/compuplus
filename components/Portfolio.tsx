@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import { PROJECTS } from '../constants';
 import { ArrowUpRight } from 'lucide-react';
