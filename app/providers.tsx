@@ -11,6 +11,8 @@ interface AppContextType {
     content: typeof CONTENT['en'];
     theme: string;
     toggleTheme: () => void;
+    isChatOpen: boolean;
+    setChatOpen: (isOpen: boolean) => void;
 }
 
 export const AppContext = createContext<AppContextType>({
@@ -19,6 +21,8 @@ export const AppContext = createContext<AppContextType>({
     content: CONTENT.en,
     theme: 'dark',
     toggleTheme: () => { },
+    isChatOpen: false,
+    setChatOpen: () => { },
 });
 
 export const useApp = () => useContext(AppContext);
@@ -28,6 +32,7 @@ const AppContentProvider = ({ children }: { children: React.ReactNode }) => {
     const { theme, setTheme, resolvedTheme } = useTheme();
     const [lang, setLang] = useState<Language>('en');
     const [mounted, setMounted] = useState(false);
+    const [isChatOpen, setChatOpen] = useState(false);
 
     useEffect(() => {
         setMounted(true);
@@ -68,7 +73,7 @@ const AppContentProvider = ({ children }: { children: React.ReactNode }) => {
     const currentTheme = (mounted && resolvedTheme) ? resolvedTheme : 'dark';
 
     return (
-        <AppContext.Provider value={{ lang, setLang, content, theme: currentTheme, toggleTheme }}>
+        <AppContext.Provider value={{ lang, setLang, content, theme: currentTheme, toggleTheme, isChatOpen, setChatOpen }}>
             {children}
         </AppContext.Provider>
     );

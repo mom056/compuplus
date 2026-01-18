@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Menu, X, Sun, Moon, Globe, Home, Briefcase, Mail, Zap, LayoutGrid } from 'lucide-react';
+import { Menu, X, Sun, Moon, Globe, Home, Briefcase, Mail, Zap, LayoutGrid, Bot } from 'lucide-react';
 import { Logo } from './Logo';
 import { useApp } from '@/app/providers';
 
@@ -12,7 +12,7 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { lang, setLang, content } = useApp();
+  const { lang, setLang, content, setChatOpen } = useApp();
 
   const toggleLang = () => {
     setLang(lang === 'en' ? 'ar' : 'en');
@@ -190,7 +190,20 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
                 {item.label}
               </span>
             </a>
+
           ))}
+
+          {/* ChatBot Trigger */}
+          <button
+            onClick={() => setChatOpen(true)}
+            className="flex flex-col items-center gap-1 p-2 rounded-lg active:scale-95 transition-transform group relative"
+          >
+            <div className="absolute top-2 right-2 w-2 h-2 bg-green-500 rounded-full animate-pulse border border-white dark:border-navy-900"></div>
+            <Bot size={22} className="text-slate-500 dark:text-slate-400 group-hover:text-cyan-500 dark:group-hover:text-cyan-400 transition-colors" />
+            <span className="text-[10px] font-medium text-slate-600 dark:text-slate-400 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
+              AI Bot
+            </span>
+          </button>
 
           {/* More / Menu Button */}
           <button
@@ -203,11 +216,12 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
             </span>
           </button>
         </div>
-      </div>
+      </div >
 
       {/* Full Screen Menu Overlay (Triggered by 'More') */}
-      <div
-        className={`fixed inset-0 bg-white/95 dark:bg-navy-900/95 backdrop-blur-xl z-[70] transition-transform duration-500 ease-in-out lg:hidden flex flex-col pt-24 px-6 gap-6 ${isMobileMenuOpen ? 'translate-y-0' : 'translate-y-full'}`}
+      < div
+        className={`fixed inset-0 bg-white/95 dark:bg-navy-900/95 backdrop-blur-xl z-[70] transition-transform duration-500 ease-in-out lg:hidden flex flex-col pt-24 px-6 gap-6 ${isMobileMenuOpen ? 'translate-y-0' : 'translate-y-full'}`
+        }
       >
         <button
           onClick={() => setIsMobileMenuOpen(false)}
@@ -220,29 +234,31 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
           {lang === 'ar' ? 'القائمة الكاملة' : 'Full Menu'}
         </h2>
 
-        {navItems.map((item) => (
-          item.isRoute ? (
-            <Link
-              key={item.label}
-              href={item.href}
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="text-2xl font-bold text-slate-800 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 text-start font-sans py-3 border-b border-slate-100 dark:border-white/5 flex items-center gap-3"
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan-500"></span>
-              {item.label}
-            </Link>
-          ) : (
-            <a
-              key={item.label}
-              href={item.href}
-              onClick={(e) => handleNavClick(e, item.href)}
-              className="text-2xl font-bold text-slate-800 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 text-start font-sans py-3 border-b border-slate-100 dark:border-white/5 flex items-center gap-3"
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan-500"></span>
-              {item.label}
-            </a>
-          )
-        ))}
+        {
+          navItems.map((item) => (
+            item.isRoute ? (
+              <Link
+                key={item.label}
+                href={item.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-2xl font-bold text-slate-800 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 text-start font-sans py-3 border-b border-slate-100 dark:border-white/5 flex items-center gap-3"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-500"></span>
+                {item.label}
+              </Link>
+            ) : (
+              <a
+                key={item.label}
+                href={item.href}
+                onClick={(e) => handleNavClick(e, item.href)}
+                className="text-2xl font-bold text-slate-800 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 text-start font-sans py-3 border-b border-slate-100 dark:border-white/5 flex items-center gap-3"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-500"></span>
+                {item.label}
+              </a>
+            )
+          ))
+        }
 
         <button
           onClick={(e) => handleNavClick(e, '#contact')}
@@ -250,7 +266,7 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
         >
           {content.nav.quote}
         </button>
-      </div>
+      </div >
     </>
   );
 };

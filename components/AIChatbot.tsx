@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Bot, Loader2 } from 'lucide-react';
+import { useApp } from '@/app/providers';
 import dynamic from 'next/dynamic';
 
 // Heavy component lazy loaded ONLY when user initiates chat
@@ -11,20 +12,20 @@ const ChatDialog = dynamic(() => import('./ChatDialog'), {
 });
 
 const AIChatbot: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const { isChatOpen, setChatOpen } = useApp();
   const [hasInteracted, setHasInteracted] = useState(false);
 
   const toggleChat = () => {
-    setIsOpen(!isOpen);
+    setChatOpen(!isChatOpen);
     if (!hasInteracted) setHasInteracted(true);
   };
 
   return (
     <>
-      {/* Floating Button - Always Visible, Lightweight */}
+      {/* Floating Button - Desktop Only */}
       <button
         onClick={toggleChat}
-        className={`fixed bottom-6 right-6 z-50 group transition-all duration-500 ${isOpen ? 'scale-0 opacity-0' : 'scale-100 opacity-100'}`}
+        className={`fixed bottom-6 right-6 z-50 group transition-all duration-500 hidden lg:flex ${isChatOpen ? 'scale-0 opacity-0' : 'scale-100 opacity-100'}`}
         aria-label="Open AI Assistant"
       >
         <div className="absolute inset-0 bg-cyan-500 rounded-full animate-ping opacity-20"></div>
@@ -42,7 +43,7 @@ const AIChatbot: React.FC = () => {
 
       {/* Chat Dialog - Lazy Loaded */}
       {hasInteracted && (
-        <ChatDialog isOpen={isOpen} onClose={() => setIsOpen(false)} />
+        <ChatDialog isOpen={isChatOpen} onClose={() => setChatOpen(false)} />
       )}
     </>
   );
