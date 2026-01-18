@@ -76,7 +76,7 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'py-4' : 'py-6'}`}
+        className={`hidden lg:block fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'py-4' : 'py-6'}`}
       >
         <div
           className={`absolute inset-0 transition-all duration-300 -z-10 ${isScrolled
@@ -205,7 +205,7 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
 
       {/* Full Screen Menu Overlay (Triggered by 'More') */}
       < div
-        className={`fixed inset-0 bg-white/95 dark:bg-navy-900/95 backdrop-blur-xl z-[70] transition-transform duration-500 ease-in-out lg:hidden flex flex-col pt-24 px-6 gap-6 ${isMobileMenuOpen ? 'translate-y-0' : 'translate-y-full'}`
+        className={`fixed inset-0 bg-white/95 dark:bg-navy-900/95 backdrop-blur-xl z-[55] transition-transform duration-500 ease-in-out lg:hidden flex flex-col pt-6 pb-28 px-6 gap-6 ${isMobileMenuOpen ? 'translate-y-0' : 'translate-y-full'}`
         }
       >
         <button
@@ -266,7 +266,7 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
 
         <button
           onClick={(e) => handleNavClick(e, '#contact')}
-          className="w-full py-4 bg-gradient-to-r from-cyan-600 to-violet-600 hover:from-cyan-500 hover:to-violet-500 text-white rounded-xl font-bold mt-auto mb-24 shadow-lg transition-all"
+          className="w-full py-4 bg-gradient-to-r from-cyan-600 to-violet-600 hover:from-cyan-500 hover:to-violet-500 text-white rounded-xl font-bold mt-auto shadow-lg transition-all"
         >
           {content.nav.quote}
         </button>

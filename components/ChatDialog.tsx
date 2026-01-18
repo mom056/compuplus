@@ -164,7 +164,7 @@ const ChatDialog: React.FC<ChatDialogProps> = ({ isOpen, onClose }) => {
             className={`
                 fixed z-50 transition-all duration-500 ease-out-expo
                 ${isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}
-                bottom-0 right-0 w-full md:w-[420px] 
+                bottom-[80px] right-0 w-full md:w-[420px] 
                 md:bottom-6 md:right-6 
                 h-[85vh] md:h-[650px] md:max-h-[85vh]
                 bg-white/95 dark:bg-navy-900/95 backdrop-blur-xl
@@ -173,7 +173,7 @@ const ChatDialog: React.FC<ChatDialogProps> = ({ isOpen, onClose }) => {
             `}
         >
             {/* Header */}
-            <div className="p-4 border-b border-slate-200 dark:border-white/10 bg-gradient-to-r from-slate-100 to-white dark:from-navy-950 dark:to-navy-900 flex justify-between items-center shrink-0">
+            < div className="p-4 border-b border-slate-200 dark:border-white/10 bg-gradient-to-r from-slate-100 to-white dark:from-navy-950 dark:to-navy-900 flex justify-between items-center shrink-0" >
                 <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-violet-500 flex items-center justify-center text-white shadow-lg shadow-cyan-500/30">
                         <Bot size={20} />
@@ -204,76 +204,82 @@ const ChatDialog: React.FC<ChatDialogProps> = ({ isOpen, onClose }) => {
                         <X size={22} />
                     </button>
                 </div>
-            </div>
+            </div >
 
             {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-cyan-500/20">
-                {messages.map((msg, idx) => (
-                    <div
-                        key={idx}
-                        className={`flex gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'} animate-fade-in`}
-                    >
+            < div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-cyan-500/20" >
+                {
+                    messages.map((msg, idx) => (
                         <div
-                            className={`
+                            key={idx}
+                            className={`flex gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'} animate-fade-in`}
+                        >
+                            <div
+                                className={`
                                 w-8 h-8 rounded-full flex items-center justify-center shrink-0
                                 ${msg.role === 'user'
-                                    ? 'bg-violet-500 text-white'
-                                    : 'bg-gradient-to-br from-cyan-500 to-violet-500 text-white'}
+                                        ? 'bg-violet-500 text-white'
+                                        : 'bg-gradient-to-br from-cyan-500 to-violet-500 text-white'}
                             `}
-                        >
-                            {msg.role === 'user' ? <User size={14} /> : <Sparkles size={14} />}
-                        </div>
-                        <div
-                            className={`
+                            >
+                                {msg.role === 'user' ? <User size={14} /> : <Sparkles size={14} />}
+                            </div>
+                            <div
+                                className={`
                                 max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed
                                 ${msg.role === 'user'
-                                    ? 'bg-violet-600 text-white rounded-tr-none'
-                                    : 'bg-slate-100 dark:bg-navy-800 text-slate-800 dark:text-slate-200 rounded-tl-none border border-slate-200 dark:border-white/5'}
+                                        ? 'bg-violet-600 text-white rounded-tr-none'
+                                        : 'bg-slate-100 dark:bg-navy-800 text-slate-800 dark:text-slate-200 rounded-tl-none border border-slate-200 dark:border-white/5'}
                             `}
-                        >
-                            {msg.text}
+                            >
+                                {msg.text}
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))
+                }
 
                 {/* Suggested Questions */}
-                {showSuggestions && messages.length <= 1 && !isLoading && (
-                    <div className="pt-2 space-y-2 animate-fade-in">
-                        <p className="text-xs text-slate-500 dark:text-slate-400 text-center mb-3">
-                            {lang === 'ar' ? 'أسئلة شائعة:' : 'Quick questions:'}
-                        </p>
-                        <div className="grid grid-cols-2 gap-2">
-                            {suggestedQuestions.map((q) => (
-                                <button
-                                    key={q.id}
-                                    onClick={() => handleSuggestionClick(q.text)}
-                                    className="p-3 text-xs text-start bg-slate-50 dark:bg-navy-800/50 hover:bg-cyan-50 dark:hover:bg-cyan-900/20 border border-slate-200 dark:border-white/10 rounded-xl transition-all hover:scale-[1.02] hover:border-cyan-500/50"
-                                >
-                                    <span className="text-base mr-1">{q.icon}</span>
-                                    <span className="text-slate-700 dark:text-slate-300">{q.text}</span>
-                                </button>
-                            ))}
+                {
+                    showSuggestions && messages.length <= 1 && !isLoading && (
+                        <div className="pt-2 space-y-2 animate-fade-in">
+                            <p className="text-xs text-slate-500 dark:text-slate-400 text-center mb-3">
+                                {lang === 'ar' ? 'أسئلة شائعة:' : 'Quick questions:'}
+                            </p>
+                            <div className="grid grid-cols-2 gap-2">
+                                {suggestedQuestions.map((q) => (
+                                    <button
+                                        key={q.id}
+                                        onClick={() => handleSuggestionClick(q.text)}
+                                        className="p-3 text-xs text-start bg-slate-50 dark:bg-navy-800/50 hover:bg-cyan-50 dark:hover:bg-cyan-900/20 border border-slate-200 dark:border-white/10 rounded-xl transition-all hover:scale-[1.02] hover:border-cyan-500/50"
+                                    >
+                                        <span className="text-base mr-1">{q.icon}</span>
+                                        <span className="text-slate-700 dark:text-slate-300">{q.text}</span>
+                                    </button>
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                )}
+                    )
+                }
 
-                {isLoading && (
-                    <div className="flex gap-3 animate-fade-in">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500 to-violet-500 flex items-center justify-center text-white shrink-0">
-                            <Loader2 size={14} className="animate-spin" />
+                {
+                    isLoading && (
+                        <div className="flex gap-3 animate-fade-in">
+                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500 to-violet-500 flex items-center justify-center text-white shrink-0">
+                                <Loader2 size={14} className="animate-spin" />
+                            </div>
+                            <div className="bg-slate-100 dark:bg-navy-800 p-3 rounded-2xl rounded-tl-none border border-slate-200 dark:border-white/5 flex gap-1 items-center">
+                                <span className="w-1.5 h-1.5 bg-cyan-500 rounded-full animate-bounce"></span>
+                                <span className="w-1.5 h-1.5 bg-cyan-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></span>
+                                <span className="w-1.5 h-1.5 bg-cyan-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></span>
+                            </div>
                         </div>
-                        <div className="bg-slate-100 dark:bg-navy-800 p-3 rounded-2xl rounded-tl-none border border-slate-200 dark:border-white/5 flex gap-1 items-center">
-                            <span className="w-1.5 h-1.5 bg-cyan-500 rounded-full animate-bounce"></span>
-                            <span className="w-1.5 h-1.5 bg-cyan-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></span>
-                            <span className="w-1.5 h-1.5 bg-cyan-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></span>
-                        </div>
-                    </div>
-                )}
+                    )
+                }
                 <div ref={messagesEndRef} />
-            </div>
+            </div >
 
             {/* Input Area */}
-            <form onSubmit={handleSubmit} className="p-4 border-t border-slate-200 dark:border-white/10 bg-white/50 dark:bg-navy-900/50 backdrop-blur flex gap-2 shrink-0">
+            < form onSubmit={handleSubmit} className="p-4 border-t border-slate-200 dark:border-white/10 bg-white/50 dark:bg-navy-900/50 backdrop-blur flex gap-2 shrink-0" >
                 <input
                     type="text"
                     value={input}
@@ -289,8 +295,8 @@ const ChatDialog: React.FC<ChatDialogProps> = ({ isOpen, onClose }) => {
                 >
                     <Send size={18} className="rtl:rotate-180" />
                 </button>
-            </form>
-        </div>
+            </form >
+        </div >
     );
 };
 
