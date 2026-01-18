@@ -7,7 +7,6 @@ import { ServiceWorkerRegistration } from '@/components/ServiceWorkerRegistratio
 import GlobalNavbar from '@/components/GlobalNavbar';
 import Link from 'next/link';
 import ClientBackgrounds from '@/components/ClientBackgrounds';
-import ScrollProgress from '@/components/ScrollProgress';
 
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
@@ -117,9 +116,7 @@ export default function RootLayout({
             <body className={`${inter.variable} ${cairo.variable} ${firaCode.variable} font-sans`}>
                 <Providers>
                     <main className="min-h-screen text-slate-900 dark:text-slate-200 selection:bg-violet-500/30 selection:text-violet-900 dark:selection:text-cyan-100">
-                        {/* Scroll Progress Indicator */}
-                        <ScrollProgress />
-                        {/* Clientside effects (Background & Chatbot) */}
+                        {/* Clientside effects (Background, Chatbot & ScrollProgress - Deferred) */}
                         <ClientBackgrounds />
 
                         {/* Global Navbar - Visible on all pages */}

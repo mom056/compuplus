@@ -11,6 +11,10 @@ const AIChatbot = dynamic(() => import('@/components/AIChatbot'), {
     ssr: false,
 });
 
+const ScrollProgress = dynamic(() => import('@/components/ScrollProgress'), {
+    ssr: false,
+});
+
 export default function ClientBackgrounds() {
     const [shouldMount, setShouldMount] = useState(false);
 
@@ -18,7 +22,7 @@ export default function ClientBackgrounds() {
         // Defer heavy components to after LCP paint
         const timer = setTimeout(() => {
             setShouldMount(true);
-        }, 2000);
+        }, 1500); // Reduced from 2000 for better UX balance
         return () => clearTimeout(timer);
     }, []);
 
@@ -28,6 +32,7 @@ export default function ClientBackgrounds() {
 
     return (
         <>
+            <ScrollProgress />
             <ParticleBackground />
             <AIChatbot />
         </>
