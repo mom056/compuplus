@@ -90,7 +90,14 @@ const AboutTimeline: React.FC = () => {
 };
 
 // Sub-component to handle individual scroll logic performantly
-const TimelineItem = ({ event, index, isEven, total, mainProgress }: any) => {
+interface TimelineItemProps {
+  event: { year: string; title: string; description: string; type: string };
+  index: number;
+  isEven: boolean;
+  total: number;
+  mainProgress: ReturnType<typeof useSpring>;
+}
+const TimelineItem = ({ event, index, isEven, total, mainProgress }: TimelineItemProps) => {
   // For the first item (index 0), we want it visible immediately
   // For others, calculate based on scroll progress
   const rangeStart = index === 0 ? -0.1 : (index / total) - 0.1;

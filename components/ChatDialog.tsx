@@ -55,8 +55,8 @@ const ChatDialog: React.FC<ChatDialogProps> = ({ isOpen, onClose }) => {
         if (hasInitialized && messages.length > 0) {
             try {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
-            } catch (e) {
-                console.warn('Failed to save chat history', e);
+            } catch {
+                // Silently fail - localStorage may be full or unavailable
             }
         }
     }, [messages, hasInitialized]);

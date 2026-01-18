@@ -1,6 +1,7 @@
 "use client";
 
-import React from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 import { ShieldCheck, Database, Wifi } from 'lucide-react';
 import { useApp } from '@/app/providers';
 
@@ -8,26 +9,55 @@ import { motion, useMotionValue, useTransform } from 'framer-motion';
 
 const Hero3D = () => {
     const { content } = useApp();
+    const containerRef = useRef<HTMLDivElement>(null);
+    // Cache dimensions to prevent forced reflows on every mouse move
+    const dimensionsRef = useRef({ width: 0, height: 0, left: 0, top: 0 });
+
+    // Update cached dimensions on mount and resize
+    useEffect(() => {
+        const updateDimensions = () => {
+            if (containerRef.current) {
+                const rect = containerRef.current.getBoundingClientRect();
+                dimensionsRef.current = {
+                    width: rect.width,
+                    height: rect.height,
+                    left: rect.left,
+                    top: rect.top
+                };
+            }
+        };
+
+        updateDimensions();
+        window.addEventListener('resize', updateDimensions);
+        window.addEventListener('scroll', updateDimensions);
+
+        return () => {
+            window.removeEventListener('resize', updateDimensions);
+            window.removeEventListener('scroll', updateDimensions);
+        };
+    }, []);
 
     // Performance Optimization: Use MotionValues instead of State to prevent re-renders on every mouse move
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
 
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        const { clientX, clientY, currentTarget } = e;
-        const { width, height, left, top } = currentTarget.getBoundingClientRect();
+    const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+        const { clientX, clientY } = e;
+        const { width, height, left, top } = dimensionsRef.current;
+
+        if (width === 0 || height === 0) return;
 
         const x = (clientX - left) / width - 0.5;
         const y = (clientY - top) / height - 0.5;
 
         mouseX.set(x);
         mouseY.set(y);
-    };
+    }, [mouseX, mouseY]);
 
-    const handleMouseLeave = () => {
+    const handleMouseLeave = useCallback(() => {
         mouseX.set(0);
         mouseY.set(0);
-    };
+    }, [mouseX, mouseY]);
 
     // Transform mouse values to rotation degrees (Max 15 degrees)
     const rotateX = useTransform(mouseY, (value) => value * -15);
@@ -35,6 +65,7 @@ const Hero3D = () => {
 
     return (
         <div
+            ref={containerRef}
             className="relative h-[400px] lg:h-[600px] w-full flex items-center justify-center perspective-1000"
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
@@ -73,15 +104,15 @@ const Hero3D = () => {
                 <div className="absolute inset-0 m-auto w-32 h-32 md:w-48 md:h-48 rounded-full bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-white/10 flex items-center justify-center shadow-2xl shadow-cyan-500/20 dark:shadow-cyan-500/10 z-20 hover:scale-105 transition-transform duration-300 cursor-pointer group/core will-change-transform" style={{ transform: 'translateZ(20px)' }}>
                     <div className="absolute inset-0 rounded-full bg-cyan-400/5 animate-ping-slow group-hover/core:animate-none pointer-events-none" />
                     <div className="relative w-20 h-20 md:w-28 md:h-28 flex items-center justify-center">
-                        {/* Using optimized small logo to avoid Next.js 750px fallback */}
-                        <img
+                        {/* Using Next.js Image for automatic optimization */}
+                        <Image
                             src="/logo-sm.png"
                             alt="CompuPlus Logo"
                             width={112}
                             height={112}
+                            quality={75}
                             className="object-contain drop-shadow-lg w-full h-full"
-                            loading="eager"
-                            decoding="async"
+                            priority
                         />
                     </div>
                 </div>
@@ -105,7 +136,15 @@ const Hero3D = () => {
 };
 
 // ... ServiceNode component remains mostly same but simplified ...
-const ServiceNode = ({ icon: Icon, color, title, subtitle, position }: { icon: any, color: string, title: string, subtitle: string, position: string }) => {
+import type { LucideIcon } from 'lucide-react';
+interface ServiceNodeProps {
+    icon: LucideIcon;
+    color: string;
+    title: string;
+    subtitle: string;
+    position: string;
+}
+const ServiceNode = ({ icon: Icon, color, title, subtitle, position }: ServiceNodeProps) => {
     const bgClass = color === 'cyan' ? 'bg-cyan-500/10' : color === 'violet' ? 'bg-violet-500/10' : 'bg-indigo-500/10';
     const textClass = color === 'cyan' ? 'text-cyan-600 dark:text-cyan-400' : color === 'violet' ? 'text-violet-600 dark:text-violet-400' : 'text-indigo-600 dark:text-indigo-400';
 

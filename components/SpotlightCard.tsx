@@ -1,10 +1,12 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useRef, useEffect, useCallback } from "react";
 import { motion, useMotionTemplate, useMotionValue, useSpring } from "framer-motion";
 
 export const SpotlightCard = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => {
     const ref = useRef<HTMLDivElement>(null);
+    // Cache dimensions to prevent forced reflows
+    const dimensionsRef = useRef({ left: 0, top: 0 });
 
     const x = useMotionValue(0);
     const y = useMotionValue(0);
@@ -12,11 +14,30 @@ export const SpotlightCard = ({ children, className = "" }: { children: React.Re
     const mouseX = useSpring(x, { stiffness: 500, damping: 100 });
     const mouseY = useSpring(y, { stiffness: 500, damping: 100 });
 
-    function handleMouseMove({ currentTarget, clientX, clientY }: React.MouseEvent) {
-        const { left, top } = currentTarget.getBoundingClientRect();
+    // Update cached dimensions on mount and resize
+    useEffect(() => {
+        const updateDimensions = () => {
+            if (ref.current) {
+                const rect = ref.current.getBoundingClientRect();
+                dimensionsRef.current = { left: rect.left, top: rect.top };
+            }
+        };
+
+        updateDimensions();
+        window.addEventListener('resize', updateDimensions);
+        window.addEventListener('scroll', updateDimensions);
+
+        return () => {
+            window.removeEventListener('resize', updateDimensions);
+            window.removeEventListener('scroll', updateDimensions);
+        };
+    }, []);
+
+    const handleMouseMove = useCallback(({ clientX, clientY }: React.MouseEvent) => {
+        const { left, top } = dimensionsRef.current;
         x.set(clientX - left);
         y.set(clientY - top);
-    }
+    }, [x, y]);
 
     return (
         <div
