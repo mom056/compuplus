@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import { motion, useInView, useAnimation, Variant } from "framer-motion";
+import { m, LazyMotion, domAnimation, useInView, useAnimation } from "framer-motion";
 import { cn } from "@/utils/cn"; // We will create this utility
 
 interface RevealProps {
@@ -42,14 +42,16 @@ export const Reveal = ({
 
     return (
         <div ref={ref} style={{ position: "relative", width, overflow: "visible" }} className={className}>
-            <motion.div
-                variants={variants}
-                initial="hidden"
-                animate={mainControls}
-                transition={{ duration, delay, type: "spring", stiffness: 50 }}
-            >
-                {children}
-            </motion.div>
+            <LazyMotion features={domAnimation}>
+                <m.div
+                    variants={variants}
+                    initial="hidden"
+                    animate={mainControls}
+                    transition={{ duration, delay, type: "spring", stiffness: 50 }}
+                >
+                    {children}
+                </m.div>
+            </LazyMotion>
         </div>
     );
 };
