@@ -292,7 +292,7 @@ const ParticleBackground: React.FC = () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       cancelAnimationFrame(animationFrameId);
     };
-  }, [theme]); // Re-run when theme changes
+  }, [theme, isMobile]); // Re-run when theme or mobile state changes
 
   return (
     <div className="fixed inset-0 pointer-events-none -z-10 bg-slate-50 dark:bg-navy-950 transition-colors duration-500 overflow-hidden">
