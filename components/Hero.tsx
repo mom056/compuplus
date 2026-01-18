@@ -5,7 +5,7 @@ import { ArrowRight } from 'lucide-react';
 import { useApp } from '@/app/providers';
 import { Reveal } from './Reveal';
 import dynamic from 'next/dynamic';
-import { m, useMotionValue, useTransform, animate } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 // Dynamically import Hero3D - only on desktop for performance
 const Hero3D = dynamic(() => import('./Hero3D'), {
@@ -38,23 +38,11 @@ const Hero: React.FC = () => {
   const ctaSecondary = content?.hero?.ctaSecondary || DEFAULTS.ctaSecondary;
   const scroll = content?.hero?.scroll || DEFAULTS.scroll;
 
-  // Typing animation
-  const count = useMotionValue(0);
-  const rounded = useTransform(count, (latest) => Math.round(latest));
-  const displayText = useTransform(rounded, (latest) => title.slice(0, latest));
   const [mounted, setMounted] = React.useState(false);
 
   useEffect(() => {
     setMounted(true);
-    count.set(0);
-    const controls = animate(count, title.length, {
-      type: "tween",
-      duration: 3,
-      ease: "easeInOut",
-      delay: 0.5,
-    });
-    return controls.stop;
-  }, [title, count]);
+  }, []);
 
   const scrollToContact = () => {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
@@ -70,7 +58,7 @@ const Hero: React.FC = () => {
       {/* Animated Background Gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-cyan-50/30 via-white/40 to-violet-50/30 dark:from-navy-950/80 dark:via-navy-900/80 dark:to-violet-950/20 transition-colors duration-700" />
 
-      {/* Moving Blobs - Reduced on mobile for performance */}
+      {/* Moving Blobs */}
       <div className="absolute top-[5%] left-[5%] w-[200px] h-[200px] md:w-[400px] md:h-[400px] bg-gradient-to-br from-violet-400 to-fuchsia-300 dark:from-violet-600/30 dark:to-fuchsia-600/20 rounded-full filter blur-[40px] md:blur-[60px] opacity-50 dark:opacity-30 transform-gpu will-change-transform pointer-events-none" />
       <div className="absolute bottom-[10%] right-[5%] w-[200px] h-[200px] md:w-[450px] md:h-[450px] bg-gradient-to-br from-cyan-400 to-blue-300 dark:from-cyan-500/30 dark:to-blue-500/20 rounded-full filter blur-[40px] md:blur-[60px] opacity-50 dark:opacity-30 transform-gpu will-change-transform pointer-events-none" />
       <div className="absolute top-[40%] left-[30%] w-[300px] h-[300px] bg-gradient-to-br from-pink-300 to-rose-200 dark:from-pink-600/25 dark:to-rose-600/15 rounded-full filter blur-[50px] opacity-40 dark:opacity-20 transform-gpu will-change-transform pointer-events-none hidden lg:block" />
@@ -81,7 +69,12 @@ const Hero: React.FC = () => {
         <div className="space-y-8 pt-10 lg:pt-0 text-center lg:text-start">
 
           {/* Badge */}
-          <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-violet-500/30 bg-white/50 dark:bg-violet-900/10 backdrop-blur-md shadow-sm">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-violet-500/30 bg-white/50 dark:bg-violet-900/10 backdrop-blur-md shadow-sm"
+          >
             <span className="relative flex h-3 w-3">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
@@ -89,25 +82,18 @@ const Hero: React.FC = () => {
             <span className="text-sm font-mono text-slate-700 dark:text-cyan-200 uppercase tracking-widest font-bold">
               {badge}
             </span>
-          </div>
+          </motion.div>
 
-          {/* Title - Animated with Typing Effect */}
-          {/* Title - Animated with Typing Effect - CLS OPTIMIZED */}
-          {/* We render a hidden copy of the text to reserve vertical space (Fixing CLS) */}
-          {/* The animated text is absolutely positioned over it */}
-          <h1 className="relative text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.15] text-slate-900 dark:text-white tracking-tight">
-            {/* Invisible placeholder for Layout Stability */}
-            <span className="invisible select-none" aria-hidden="true">{title}</span>
-
-            {/* Actual Animated Text Overlay */}
-            <span className="absolute inset-0 top-0 left-0 text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-cyan-600 to-violet-600 dark:from-white dark:via-cyan-400 dark:to-violet-400">
-              <m.span>{displayText}</m.span>
-              <m.span
-                animate={{ opacity: [0, 1, 0] }}
-                transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
-                className="inline-block w-[3px] h-[0.9em] bg-violet-600 dark:bg-violet-400 ml-1 align-middle"
-              />
-            </span>
+          {/* Title - LCP OPTIMIZED (No Typing, Immediate Render) */}
+          <h1 className="relative text-4xl md:text-5xl lg:text-7xl font-black leading-[1.1] text-slate-900 dark:text-white tracking-tighter">
+            <motion.span
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="block text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-cyan-600 to-violet-600 dark:from-white dark:via-cyan-400 dark:to-violet-400"
+            >
+              {title}
+            </motion.span>
           </h1>
 
           {/* Subtitle - Critical for LCP */}
