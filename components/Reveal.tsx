@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
-import { m, LazyMotion, domAnimation, useInView, useAnimation } from "framer-motion";
-import { cn } from "@/utils/cn"; // We will create this utility
+import React, { useEffect, useRef, useState } from "react";
+import { cn } from "@/utils/cn";
 
 interface RevealProps {
     children: React.ReactNode;
@@ -21,37 +20,60 @@ export const Reveal = ({
     direction = "up",
     duration = 0.5,
 }: RevealProps) => {
-    const ref = useRef(null);
-    const isInView = useInView(ref, { once: true });
-    const mainControls = useAnimation();
+    const ref = useRef<HTMLDivElement>(null);
+    const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
-        if (isInView) {
-            mainControls.start("visible");
-        }
-    }, [isInView, mainControls]);
+        const element = ref.current;
+        if (!element) return;
 
-    const variants = {
-        hidden: {
-            opacity: 0,
-            y: direction === "up" ? 75 : direction === "down" ? -75 : 0,
-            x: direction === "left" ? 75 : direction === "right" ? -75 : 0,
-        },
-        visible: { opacity: 1, y: 0, x: 0 },
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        setIsVisible(true);
+                        observer.unobserve(element);
+                    }
+                });
+            },
+            { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
+        );
+
+        observer.observe(element);
+
+        return () => observer.disconnect();
+    }, []);
+
+    // Calculate initial transform based on direction
+    const getInitialTransform = () => {
+        switch (direction) {
+            case "up": return "translateY(40px)";
+            case "down": return "translateY(-40px)";
+            case "left": return "translateX(40px)";
+            case "right": return "translateX(-40px)";
+            default: return "translateY(40px)";
+        }
     };
 
     return (
-        <div ref={ref} style={{ position: "relative", width, overflow: "visible" }} className={className}>
-            <LazyMotion features={domAnimation}>
-                <m.div
-                    variants={variants}
-                    initial="hidden"
-                    animate={mainControls}
-                    transition={{ duration, delay, type: "spring", stiffness: 50 }}
-                >
-                    {children}
-                </m.div>
-            </LazyMotion>
+        <div
+            ref={ref}
+            style={{
+                position: "relative",
+                width,
+                overflow: "visible",
+            }}
+            className={className}
+        >
+            <div
+                style={{
+                    opacity: isVisible ? 1 : 0,
+                    transform: isVisible ? "translate(0)" : getInitialTransform(),
+                    transition: `opacity ${duration}s ease-out ${delay}s, transform ${duration}s ease-out ${delay}s`,
+                }}
+            >
+                {children}
+            </div>
         </div>
     );
 };

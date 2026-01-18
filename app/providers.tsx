@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import { ThemeProvider, useTheme } from 'next-themes';
-import { LazyMotion, domAnimation } from 'framer-motion';
 import { CONTENT, Language } from '../constants';
 
 // Create Context
@@ -70,9 +69,7 @@ const AppContentProvider = ({ children }: { children: React.ReactNode }) => {
 
     return (
         <AppContext.Provider value={{ lang, setLang, content, theme: currentTheme, toggleTheme }}>
-            <LazyMotion features={domAnimation}>
-                {children}
-            </LazyMotion>
+            {children}
         </AppContext.Provider>
     );
 };
