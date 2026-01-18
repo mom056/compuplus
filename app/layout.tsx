@@ -104,7 +104,7 @@ export default function RootLayout({
                 {/* Preconnect to critical third-party origins for faster LCP */}
                 <link rel="preconnect" href="https://images.unsplash.com" />
                 <link rel="dns-prefetch" href="https://images.unsplash.com" />
-                <link rel="preconnect" href="https://www.transparenttextures.com" crossOrigin="anonymous" />
+                <link rel="preconnect" href="https://www.transparenttextures.com" />
                 <link rel="dns-prefetch" href="https://www.transparenttextures.com" />
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
