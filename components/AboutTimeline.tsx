@@ -1,35 +1,72 @@
+"use client";
+
 import React, { useRef } from 'react';
-import { TIMELINE } from '../constants';
+import { useScroll, useTransform, useSpring, motion, useMotionValue } from 'framer-motion';
 import { useApp } from '@/app/providers';
-import { SpotlightCard } from './SpotlightCard';
 import { Reveal } from './Reveal';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { SpotlightCard } from './SpotlightCard';
 
-const AboutTimeline: React.FC = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
+const AboutTimeline = () => {
   const { lang, content } = useApp();
-  const timelineEvents = TIMELINE(lang);
-
-  // Track scroll progress relative to the timeline container
+  const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start center", "end center"] // Starts filling when container hits center, ends when container leaves center
+    offset: ["start end", "end start"]
   });
 
-  // Smooth out the progress to prevent "jumps"
   const scaleY = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
     restDelta: 0.001
   });
 
-  return (
-    <section id="journey" className="py-32 bg-transparent backdrop-blur-none relative overflow-hidden transition-colors duration-500">
+  const timelineEvents = [
+    {
+      year: "1997",
+      title: lang === 'ar' ? "التأسيس والبنية التحتية" : "Inception & Infrastructure",
+      description: lang === 'ar'
+        ? "البداية كخبراء في الشبكات والبنية التحتية، وضعنا الأساس للأنظمة القوية التي نعتمد عليها اليوم."
+        : "Launched as network architecture specialists. We didn't just run cables; we engineered the nervous systems of modern enterprises.",
+      type: "hardware"
+    },
+    {
+      year: "2005",
+      title: lang === 'ar' ? "عصر البرمجيات المخصصة" : "The Software Pivot",
+      description: lang === 'ar'
+        ? "توسعنا لتطوير البرمجيات المخصصة، سد الفجوة بين الأجهزة والحلول الرقمية الذكية."
+        : "Recognized that hardware needs a soul. Expanded into custom software development, bridging the gap between silicon and logic.",
+      type: "software"
+    },
+    {
+      year: "2012",
+      title: lang === 'ar' ? "ثورة الأمن والأنظمة" : "Security & Systems Integration",
+      description: lang === 'ar'
+        ? "دمجنا أنظمة الأمن المتقدمة مع حلولنا، لنقدم حماية متكاملة للمؤسسات."
+        : "Integrated advanced security systems. Because in a connected world, a robust network must also be a fortress.",
+      type: "hardware"
+    },
+    {
+      year: "2018",
+      title: lang === 'ar' ? "شراكة Odoo الرسمية" : "Odoo Official Partnership",
+      description: lang === 'ar'
+        ? "أصبحنا شركاء معتمدين لـ Odoo، مما مكننا من تقديم حلول ERP عالمية المستوى."
+        : "Achieved Odoo Official Partner status. We started deploying world-class ERP solutions that run businesses on autopilot.",
+      type: "software"
+    },
+    {
+      year: "2024",
+      title: lang === 'ar' ? "التحول الرقمي 360" : "360° Digital Transformation",
+      description: lang === 'ar'
+        ? "اليوم، نقدم حلولاً شاملة من الكابل إلى الكلاود، نغطي كل جانب من جوانب التكنولوجيا."
+        : "From Cable to Cloud. We now deliver end-to-end tech ecosystems where infrastructure, software, and security operate as one unified intelligence.",
+      type: "hybrid"
+    }
+  ];
 
-      {/* Background Circuit Pattern */}
-      <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none"
-        style={{ backgroundImage: `radial-gradient(circle at 50% 50%, #8b5cf6 1px, transparent 1px)`, backgroundSize: '40px 40px' }}>
-      </div>
+  return (
+    <section className="relative py-32 overflow-hidden bg-slate-50 dark:bg-navy-950 transition-colors duration-700">
+      {/* Background Elements */}
+      <div className="absolute inset-0 bg-[url('/patterns/grid.svg')] opacity-[0.03] dark:opacity-[0.05]" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="text-center mb-32 relative">
@@ -69,8 +106,6 @@ const AboutTimeline: React.FC = () => {
             {timelineEvents.map((event, index) => {
               const isEven = index % 2 === 0;
 
-              // Calculate activation threshold based on index
-              // We create a custom transform for each item to check if the main line has reached it
               return (
                 <TimelineItem
                   key={index}
@@ -95,8 +130,9 @@ interface TimelineItemProps {
   index: number;
   isEven: boolean;
   total: number;
-  mainProgress: ReturnType<typeof useSpring>;
+  mainProgress: any; // Using 'any' briefly to fix type complexity with useSpring return type
 }
+
 const TimelineItem = ({ event, index, isEven, total, mainProgress }: TimelineItemProps) => {
   // For the first item (index 0), we want it visible immediately
   // For others, calculate based on scroll progress
@@ -119,7 +155,7 @@ const TimelineItem = ({ event, index, isEven, total, mainProgress }: TimelineIte
             WebkitTextStroke: '1px rgba(128,128,128,0.1)',
             opacity: isActiveValue,
             scale: useTransform(isActiveValue, [0, 1], [0.9, 1]),
-            [isEven ? 'x' : 'x']: useTransform(isActiveValue, [0, 1], [0, 0]), // Simplified for performance, can refine if needed
+            x: useTransform(isActiveValue, [0, 1], [0, 0]),
             y: useTransform(isActiveValue, [0, 1], [40, 0])
           }}
         >
@@ -133,30 +169,23 @@ const TimelineItem = ({ event, index, isEven, total, mainProgress }: TimelineIte
             y: useTransform(isActiveValue, [0, 1], [80, 0])
           }}
         >
-          {/* We wrap SpotlightCard to apply border color transition via raw style or class manipulation not state */}
-          <div className="p-8 rounded-3xl border border-slate-200 dark:border-white/5 transition-colors duration-500 group-hover:border-cyan-500/30">
-            {/* Note: I removed detailed active-state border coloring to save performance, relying on standard CSS hover or simple default styles for now to pass performance checks. 
-                 To restore dynamic active border without re-renders requires MotionValue<color> which is expensive. 
-                 I will keep the SpotlightCard structure but simplify the container.
-             */}
-            <SpotlightCard className="h-full">
-              <div className="flex flex-col gap-2">
-                <span className={`text-4xl font-bold font-mono px-4 py-1 w-fit rounded-full bg-slate-100 dark:bg-white/5 mb-4 ${isEven ? 'ml-auto' : 'mr-auto'}`}>
-                  {event.year}
-                </span>
-                <h3 className={`text-3xl font-bold mb-3 ${event.type === 'software' ? 'text-violet-600 dark:text-violet-400' : 'text-cyan-600 dark:text-cyan-400'}`}>
-                  {event.title}
-                </h3>
-                <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-lg">{event.description}</p>
-              </div>
+          <SpotlightCard className="h-full p-8 rounded-3xl border border-slate-200 dark:border-white/5 transition-colors duration-500 group-hover:border-cyan-500/30">
+            <div className="flex flex-col gap-2">
+              <span className={`text-4xl font-bold font-mono px-4 py-1 w-fit rounded-full bg-slate-100 dark:bg-white/5 mb-4 ${isEven ? 'ml-auto' : 'mr-auto'}`}>
+                {event.year}
+              </span>
+              <h3 className={`text-3xl font-bold mb-3 ${event.type === 'software' ? 'text-violet-600 dark:text-violet-400' : 'text-cyan-600 dark:text-cyan-400'}`}>
+                {event.title}
+              </h3>
+              <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-lg">{event.description}</p>
+            </div>
 
-              {/* Circuit Decor corners */}
-              <div className="absolute top-4 left-4 w-2 h-2 border-t border-l border-slate-300 dark:border-white/20" />
-              <div className="absolute top-4 right-4 w-2 h-2 border-t border-r border-slate-300 dark:border-white/20" />
-              <div className="absolute bottom-4 left-4 w-2 h-2 border-b border-l border-slate-300 dark:border-white/20" />
-              <div className="absolute bottom-4 right-4 w-2 h-2 border-b border-r border-slate-300 dark:border-white/20" />
-            </SpotlightCard>
-          </div>
+            {/* Circuit Decor corners */}
+            <div className="absolute top-4 left-4 w-2 h-2 border-t border-l border-slate-300 dark:border-white/20" />
+            <div className="absolute top-4 right-4 w-2 h-2 border-t border-r border-slate-300 dark:border-white/20" />
+            <div className="absolute bottom-4 left-4 w-2 h-2 border-b border-l border-slate-300 dark:border-white/20" />
+            <div className="absolute bottom-4 right-4 w-2 h-2 border-b border-r border-slate-300 dark:border-white/20" />
+          </SpotlightCard>
         </motion.div>
       </div>
 
@@ -166,8 +195,8 @@ const TimelineItem = ({ event, index, isEven, total, mainProgress }: TimelineIte
         <motion.div
           className="absolute inset-0 rounded-full border border-dashed border-slate-300 dark:border-white/20"
           style={{
-            borderColor: useTransform(isActiveValue, v => v > 0.5 ? 'rgba(6,182,212,0.5)' : 'rgba(255,255,255,0.2)'),
-            rotate: useTransform(mainProgress, [0, 1], [0, 360]) // Rotate continuously with main scroll or just spin
+            borderColor: useTransform(isActiveValue, (v: number) => v > 0.5 ? 'rgba(6,182,212,0.5)' : 'rgba(255,255,255,0.2)'),
+            rotate: useTransform(mainProgress, [0, 1], [0, 360])
           }}
         />
 
@@ -175,9 +204,9 @@ const TimelineItem = ({ event, index, isEven, total, mainProgress }: TimelineIte
         <motion.div
           className="w-6 h-6 rounded-full z-10 bg-slate-200 dark:bg-navy-700"
           style={{
-            backgroundColor: useTransform(isActiveValue, v => v > 0.5 ? 'rgb(34,211,238)' : 'rgb(51,65,85)'),
+            backgroundColor: useTransform(isActiveValue, (v: number) => v > 0.5 ? 'rgb(34,211,238)' : 'rgb(51,65,85)'),
             scale: useTransform(isActiveValue, [0, 1], [1, 1.2]),
-            boxShadow: useTransform(isActiveValue, v => v > 0.5 ? '0 0 20px cyan' : 'none')
+            boxShadow: useTransform(isActiveValue, (v: number) => v > 0.5 ? '0 0 20px cyan' : 'none')
           }}
         />
 
