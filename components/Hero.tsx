@@ -5,7 +5,6 @@ import { ArrowRight } from 'lucide-react';
 import { useApp } from '@/app/providers';
 import { Reveal } from './Reveal';
 import dynamic from 'next/dynamic';
-import { motion } from 'framer-motion';
 
 // Dynamically import Hero3D - only on desktop for performance
 const Hero3D = dynamic(() => import('./Hero3D'), {
@@ -65,15 +64,12 @@ const Hero: React.FC = () => {
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
 
-        {/* Left: Content - SSR Optimized for LCP */}
+        {/* Left: Content - ZERO JS LCP */}
         <div className="space-y-8 pt-10 lg:pt-0 text-center lg:text-start">
 
           {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-violet-500/30 bg-white/50 dark:bg-violet-900/10 backdrop-blur-md shadow-sm"
+          <div
+            className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-violet-500/30 bg-white/50 dark:bg-violet-900/10 backdrop-blur-md shadow-sm opacity-0 animate-fade-in-up"
           >
             <span className="relative flex h-3 w-3">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
@@ -82,27 +78,24 @@ const Hero: React.FC = () => {
             <span className="text-sm font-mono text-slate-700 dark:text-cyan-200 uppercase tracking-widest font-bold">
               {badge}
             </span>
-          </motion.div>
+          </div>
 
-          {/* Title - LCP OPTIMIZED (No Typing, Immediate Render) */}
+          {/* Title - ZERO JS LCP */}
           <h1 className="relative text-4xl md:text-5xl lg:text-7xl font-black leading-[1.1] text-slate-900 dark:text-white tracking-tighter">
-            <motion.span
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="block text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-cyan-600 to-violet-600 dark:from-white dark:via-cyan-400 dark:to-violet-400"
+            <span
+              className="block text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-cyan-600 to-violet-600 dark:from-white dark:via-cyan-400 dark:to-violet-400 opacity-0 animate-fade-in-up delay-100"
             >
               {title}
-            </motion.span>
+            </span>
           </h1>
 
           {/* Subtitle - Critical for LCP */}
-          <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300 max-w-xl leading-relaxed mx-auto lg:mx-0 border-l-4 border-violet-500 pl-6">
+          <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300 max-w-xl leading-relaxed mx-auto lg:mx-0 border-l-4 border-violet-500 pl-6 opacity-0 animate-fade-in-up delay-200">
             {subtitle}
           </p>
 
           {/* CTAs */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2 opacity-0 animate-fade-in-up delay-[300ms]">
             <button
               onClick={scrollToContact}
               className="group relative px-8 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold rounded-lg overflow-hidden transition-transform duration-200 hover:scale-105 shadow-lg shadow-cyan-500/20 active:scale-95"

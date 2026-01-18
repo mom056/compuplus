@@ -204,3 +204,28 @@ textarea:focus-visible {
 .skeleton {
   @apply bg-gradient-to-r from-slate-200 via-slate-100 to-slate-200 dark:from-navy-900 dark:via-navy-800 dark:to-navy-900 animate-pulse rounded;
 }
+
+/* Zero-JS Animations for LCP */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.delay-100 {
+  animation-delay: 100ms;
+}
+
+.delay-200 {
+  animation-delay: 200ms;
+}
