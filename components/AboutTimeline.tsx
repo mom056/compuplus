@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useRef } from 'react';
-import { useScroll, useTransform, useSpring, motion, useMotionValue } from 'framer-motion';
+import React, { useRef, useState, useEffect } from 'react';
 import { useApp } from '@/app/providers';
 import { Reveal } from './Reveal';
 import { SpotlightCard } from './SpotlightCard';
@@ -9,16 +8,34 @@ import { SpotlightCard } from './SpotlightCard';
 const AboutTimeline = () => {
   const { lang, content } = useApp();
   const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  });
+  const [scrollProgress, setScrollProgress] = useState(0);
 
-  const scaleY = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001
-  });
+  // Use Intersection Observer + scroll listener instead of framer-motion
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      const rect = container.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      const containerHeight = container.offsetHeight;
+
+      // Calculate progress: 0 when top enters viewport, 1 when bottom leaves
+      const progress = Math.min(
+        Math.max(
+          (windowHeight - rect.top) / (containerHeight + windowHeight),
+          0
+        ),
+        1
+      );
+      setScrollProgress(progress);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // Initial calculation
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const timelineEvents = [
     {
@@ -81,7 +98,7 @@ const AboutTimeline = () => {
 
           <Reveal width="100%" delay={0.1}>
             <h2 className="text-5xl md:text-7xl font-black text-slate-900 dark:text-white mt-8 mb-6 tracking-tighter">
-              {lang === 'ar' ? 'شفرة' : 'The'} <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 via-fuchsia-500 to-violet-600 animate-gradient-x">{lang === 'ar' ? 'التطور' : 'Evolution'}</span> {lang === 'en' && 'Code'}
+              {lang === 'ar' ? 'شفرة' : 'The'} <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 via-fuchsia-500 to-violet-600">{lang === 'ar' ? 'التطور' : 'Evolution'}</span> {lang === 'en' && 'Code'}
             </h2>
           </Reveal>
 
@@ -93,18 +110,24 @@ const AboutTimeline = () => {
         </div>
 
         <div className="relative" ref={containerRef}>
-          {/* Central Circuit Line Background (Dashed/Techy) */}
+          {/* Central Circuit Line Background */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-0.5 h-full bg-gradient-to-b from-transparent via-slate-300 dark:via-white/10 to-transparent" />
 
-          {/* Active Lit Circuit Line */}
-          <motion.div
-            className="absolute top-0 left-1/2 -translate-x-1/2 w-[3px] bg-gradient-to-b from-cyan-400 via-violet-500 to-cyan-400 shadow-[0_0_20px_rgba(139,92,246,0.8)] rounded-full z-10 origin-top"
-            style={{ scaleY: scaleY, height: "100%" }}
+          {/* Active Lit Circuit Line - CSS animated with scroll progress */}
+          <div
+            className="absolute top-0 left-1/2 -translate-x-1/2 w-[3px] bg-gradient-to-b from-cyan-400 via-violet-500 to-cyan-400 shadow-[0_0_20px_rgba(139,92,246,0.8)] rounded-full z-10 origin-top transition-transform duration-100"
+            style={{
+              height: '100%',
+              transform: `scaleY(${scrollProgress})`,
+              transformOrigin: 'top'
+            }}
           />
 
           <div className="space-y-32 py-10">
             {timelineEvents.map((event, index) => {
               const isEven = index % 2 === 0;
+              const itemProgress = (index / timelineEvents.length);
+              const isActive = scrollProgress >= itemProgress - 0.1;
 
               return (
                 <TimelineItem
@@ -112,8 +135,7 @@ const AboutTimeline = () => {
                   event={event}
                   index={index}
                   isEven={isEven}
-                  total={timelineEvents.length}
-                  mainProgress={scaleY}
+                  isActive={isActive}
                 />
               );
             })}
@@ -124,50 +146,34 @@ const AboutTimeline = () => {
   );
 };
 
-// Sub-component to handle individual scroll logic performantly
+// Simplified sub-component using CSS animations
 interface TimelineItemProps {
   event: { year: string; title: string; description: string; type: string };
   index: number;
   isEven: boolean;
-  total: number;
-  mainProgress: any; // Using 'any' briefly to fix type complexity with useSpring return type
+  isActive: boolean;
 }
 
-const TimelineItem = ({ event, index, isEven, total, mainProgress }: TimelineItemProps) => {
-  // For the first item (index 0), we want it visible immediately
-  // For others, calculate based on scroll progress
-  const rangeStart = index === 0 ? -0.1 : (index / total) - 0.1;
-
-  const isActiveValue = useTransform(mainProgress, (value: number) => value >= rangeStart ? 1 : 0);
-
+const TimelineItem = ({ event, index, isEven, isActive }: TimelineItemProps) => {
   return (
     <div className={`flex flex-col md:flex-row items-center gap-8 md:gap-24 ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
 
       {/* Content Box */}
-      <div className={`flex-1 w-full ${isEven ? 'md:text-right md:rtl:text-left' : 'md:text-left md:rtl:text-right'} relative perspective-1000`}>
+      <div className={`flex-1 w-full ${isEven ? 'md:text-right md:rtl:text-left' : 'md:text-left md:rtl:text-right'} relative`}>
 
         {/* Mega Year (Background Layer) */}
-        <motion.span
-          className={`absolute top-1/2 -translate-y-1/2 text-[100px] md:text-[140px] font-black text-slate-100 dark:text-white/[0.02] select-none pointer-events-none z-0
+        <span
+          className={`absolute top-1/2 -translate-y-1/2 text-[100px] md:text-[140px] font-black text-slate-100 dark:text-white/[0.02] select-none pointer-events-none z-0 transition-all duration-700
                     ${isEven ? 'right-0 md:-right-20' : 'left-0 md:-left-20'}
+                    ${isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}
                 `}
-          style={{
-            WebkitTextStroke: '1px rgba(128,128,128,0.1)',
-            opacity: isActiveValue,
-            scale: useTransform(isActiveValue, [0, 1], [0.9, 1]),
-            x: useTransform(isActiveValue, [0, 1], [0, 0]),
-            y: useTransform(isActiveValue, [0, 1], [40, 0])
-          }}
+          style={{ WebkitTextStroke: '1px rgba(128,128,128,0.1)' }}
         >
           {event.year}
-        </motion.span>
+        </span>
 
-        <motion.div
-          className="relative z-10"
-          style={{
-            opacity: isActiveValue,
-            y: useTransform(isActiveValue, [0, 1], [80, 0])
-          }}
+        <div
+          className={`relative z-10 transition-all duration-700 ${isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
         >
           <SpotlightCard className="h-full p-8 rounded-3xl border border-slate-200 dark:border-white/5 transition-colors duration-500 group-hover:border-cyan-500/30">
             <div className="flex flex-col gap-2">
@@ -186,37 +192,24 @@ const TimelineItem = ({ event, index, isEven, total, mainProgress }: TimelineIte
             <div className="absolute bottom-4 left-4 w-2 h-2 border-b border-l border-slate-300 dark:border-white/20" />
             <div className="absolute bottom-4 right-4 w-2 h-2 border-b border-r border-slate-300 dark:border-white/20" />
           </SpotlightCard>
-        </motion.div>
+        </div>
       </div>
 
       {/* Center Node (Circuit Breaker) */}
       <div className="relative flex items-center justify-center shrink-0 w-12 h-12 z-20">
-        {/* Outer Rings - using motion for opacity/scale */}
-        <motion.div
-          className="absolute inset-0 rounded-full border border-dashed border-slate-300 dark:border-white/20"
-          style={{
-            borderColor: useTransform(isActiveValue, (v: number) => v > 0.5 ? 'rgba(6,182,212,0.5)' : 'rgba(255,255,255,0.2)'),
-            rotate: useTransform(mainProgress, [0, 1], [0, 360])
-          }}
+        {/* Outer Ring */}
+        <div
+          className={`absolute inset-0 rounded-full border border-dashed transition-all duration-500 ${isActive ? 'border-cyan-500/50 rotate-180' : 'border-slate-300 dark:border-white/20 rotate-0'}`}
         />
 
         {/* Core Node */}
-        <motion.div
-          className="w-6 h-6 rounded-full z-10 bg-slate-200 dark:bg-navy-700"
-          style={{
-            backgroundColor: useTransform(isActiveValue, (v: number) => v > 0.5 ? 'rgb(34,211,238)' : 'rgb(51,65,85)'),
-            scale: useTransform(isActiveValue, [0, 1], [1, 1.2]),
-            boxShadow: useTransform(isActiveValue, (v: number) => v > 0.5 ? '0 0 20px cyan' : 'none')
-          }}
+        <div
+          className={`w-6 h-6 rounded-full z-10 transition-all duration-500 ${isActive ? 'bg-cyan-400 scale-125 shadow-[0_0_20px_cyan]' : 'bg-slate-400 dark:bg-navy-700 scale-100'}`}
         />
 
         {/* Connecting Arms */}
-        <motion.div
-          className={`absolute h-0.5 bg-cyan-500/50 ${isEven ? 'right-1/2' : 'left-1/2'}`}
-          style={{
-            width: useTransform(isActiveValue, [0, 1], ['0%', '200%']),
-            opacity: isActiveValue
-          }}
+        <div
+          className={`absolute h-0.5 bg-cyan-500/50 transition-all duration-500 ${isEven ? 'right-1/2' : 'left-1/2'} ${isActive ? 'w-[200%] opacity-100' : 'w-0 opacity-0'}`}
         />
       </div>
 

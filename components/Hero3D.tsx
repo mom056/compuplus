@@ -1,15 +1,15 @@
 "use client";
 
-import React, { useRef, useEffect, useCallback } from 'react';
+import React, { useRef, useEffect, useCallback, useState } from 'react';
 import Image from 'next/image';
 import { ShieldCheck, Database, Wifi } from 'lucide-react';
 import { useApp } from '@/app/providers';
-
-import { motion, useMotionValue, useTransform } from 'framer-motion';
+import type { LucideIcon } from 'lucide-react';
 
 const Hero3D = () => {
     const { content } = useApp();
     const containerRef = useRef<HTMLDivElement>(null);
+    const innerRef = useRef<HTMLDivElement>(null);
     // Cache dimensions to prevent forced reflows on every mouse move
     const dimensionsRef = useRef({ width: 0, height: 0, left: 0, top: 0 });
 
@@ -37,31 +37,26 @@ const Hero3D = () => {
         };
     }, []);
 
-    // Performance Optimization: Use MotionValues instead of State to prevent re-renders on every mouse move
-    const mouseX = useMotionValue(0);
-    const mouseY = useMotionValue(0);
-
     const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
         const { clientX, clientY } = e;
         const { width, height, left, top } = dimensionsRef.current;
 
-        if (width === 0 || height === 0) return;
+        if (width === 0 || height === 0 || !innerRef.current) return;
 
         const x = (clientX - left) / width - 0.5;
         const y = (clientY - top) / height - 0.5;
 
-        mouseX.set(x);
-        mouseY.set(y);
-    }, [mouseX, mouseY]);
+        // Apply rotation directly to DOM - avoids React re-renders
+        const rotateX = y * -15;
+        const rotateY = x * 15;
+        innerRef.current.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    }, []);
 
     const handleMouseLeave = useCallback(() => {
-        mouseX.set(0);
-        mouseY.set(0);
-    }, [mouseX, mouseY]);
-
-    // Transform mouse values to rotation degrees (Max 15 degrees)
-    const rotateX = useTransform(mouseY, (value) => value * -15);
-    const rotateY = useTransform(mouseX, (value) => value * 15);
+        if (innerRef.current) {
+            innerRef.current.style.transform = 'rotateX(0deg) rotateY(0deg)';
+        }
+    }, []);
 
     return (
         <div
@@ -70,13 +65,9 @@ const Hero3D = () => {
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
         >
-            <motion.div
-                className="relative w-[320px] h-[320px] md:w-[500px] md:h-[500px] transform-style-3d"
-                style={{
-                    rotateX,
-                    rotateY,
-                }}
-                transition={{ type: "spring", stiffness: 400, damping: 30 }}
+            <div
+                ref={innerRef}
+                className="relative w-[320px] h-[320px] md:w-[500px] md:h-[500px] transform-style-3d transition-transform duration-150 ease-out"
             >
                 {/* --- Interactive Network Lines (SVG) --- */}
                 <svg className="absolute inset-0 w-full h-full z-10 pointer-events-none overflow-visible">
@@ -119,32 +110,28 @@ const Hero3D = () => {
 
                 {/* --- Floating Service Nodes --- */}
                 <div className="absolute top-[0%] left-[50%] -translate-x-1/2 -translate-y-1/2 z-30 perspective-500" style={{ transform: 'translateZ(60px)' }}>
-                    <ServiceNode icon={Wifi} color="cyan" title="Infrastructure" subtitle="" position="top" />
+                    <ServiceNode icon={Wifi} color="cyan" title="Infrastructure" />
                 </div>
 
                 <div className="absolute bottom-[10%] right-[-10%] md:right-[0%] z-30 perspective-500" style={{ transform: 'translateZ(90px)' }}>
-                    <ServiceNode icon={Database} color="violet" title="ERP Solutions" subtitle="" position="right" />
+                    <ServiceNode icon={Database} color="violet" title="ERP Solutions" />
                 </div>
 
                 <div className="absolute bottom-[10%] left-[-10%] md:left-[0%] z-30 perspective-500" style={{ transform: 'translateZ(90px)' }}>
-                    <ServiceNode icon={ShieldCheck} color="indigo" title="Security" subtitle="" position="left" />
+                    <ServiceNode icon={ShieldCheck} color="indigo" title="Security" />
                 </div>
 
-            </motion.div>
+            </div>
         </div>
     );
 };
 
-// ... ServiceNode component remains mostly same but simplified ...
-import type { LucideIcon } from 'lucide-react';
 interface ServiceNodeProps {
     icon: LucideIcon;
     color: string;
     title: string;
-    subtitle: string;
-    position: string;
 }
-const ServiceNode = ({ icon: Icon, color, title, subtitle, position }: ServiceNodeProps) => {
+const ServiceNode = ({ icon: Icon, color, title }: ServiceNodeProps) => {
     const bgClass = color === 'cyan' ? 'bg-cyan-500/10' : color === 'violet' ? 'bg-violet-500/10' : 'bg-indigo-500/10';
     const textClass = color === 'cyan' ? 'text-cyan-600 dark:text-cyan-400' : color === 'violet' ? 'text-violet-600 dark:text-violet-400' : 'text-indigo-600 dark:text-indigo-400';
 
