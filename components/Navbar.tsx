@@ -156,22 +156,7 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
             </button>
           </div>
 
-          {/* Mobile Top Controls (Logo is already left) */}
-          <div className="flex items-center gap-3 lg:hidden">
-            <button
-              onClick={toggleLang}
-              className="text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-cyan-600 font-sans border border-slate-200 dark:border-white/10 px-2 py-1 rounded-lg"
-            >
-              {lang === 'en' ? 'AR' : 'EN'}
-            </button>
 
-            <button
-              onClick={toggleTheme}
-              className="p-2 rounded-full bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-white/10"
-            >
-              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-            </button>
-          </div>
         </div>
       </nav>
 
@@ -259,6 +244,25 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
             )
           ))
         }
+
+        {/* Mobile Settings (Moved from Top Bar) */}
+        <div className="flex items-center justify-between gap-4 py-4 border-b border-slate-100 dark:border-white/5">
+          <button
+            onClick={toggleLang}
+            className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-200 font-bold"
+          >
+            <Globe size={18} />
+            <span>{lang === 'en' ? 'عربي' : 'English'}</span>
+          </button>
+
+          <button
+            onClick={toggleTheme}
+            className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-200 font-bold"
+          >
+            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+            <span>{theme === 'dark' ? (lang === 'ar' ? 'فاتح' : 'Light') : (lang === 'ar' ? 'داكن' : 'Dark')}</span>
+          </button>
+        </div>
 
         <button
           onClick={(e) => handleNavClick(e, '#contact')}
