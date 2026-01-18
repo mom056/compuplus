@@ -76,7 +76,7 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
   return (
     <>
       <nav
-        className={`${isChatOpen ? 'hidden lg:block' : 'block'} fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'py-4' : 'py-6'}`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'py-4' : 'py-6'}`}
       >
         <div
           className={`absolute inset-0 transition-all duration-300 -z-10 ${isScrolled

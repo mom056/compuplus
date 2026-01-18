@@ -162,14 +162,15 @@ const ChatDialog: React.FC<ChatDialogProps> = ({ isOpen, onClose }) => {
     return (
         <div
             className={`
-                fixed z-50 transition-all duration-500 ease-out-expo
-                ${isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}
-                bottom-[80px] right-0 w-full md:w-[420px] 
+                fixed transition-all duration-500 ease-out-expo
+                ${isOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-10 pointer-events-none'}
+                z-[100] inset-0 md:inset-auto
                 md:bottom-6 md:right-6 
-                h-[calc(100dvh-90px)] md:h-[650px] md:max-h-[85vh]
-                bg-white/95 dark:bg-navy-900/95 backdrop-blur-xl
-                border-t md:border border-slate-200 dark:border-cyan-500/30
-                rounded-t-2xl md:rounded-2xl shadow-2xl flex flex-col overflow-hidden
+                w-full md:w-[420px] 
+                h-[100dvh] md:h-[650px] md:max-h-[85vh]
+                bg-slate-50 dark:bg-navy-900 md:bg-white/95 md:dark:bg-navy-900/95 md:backdrop-blur-xl
+                md:border border-slate-200 dark:border-cyan-500/30
+                md:rounded-2xl shadow-2xl flex flex-col overflow-hidden
             `}
         >
             {/* Header */}
