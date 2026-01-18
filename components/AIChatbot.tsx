@@ -15,9 +15,15 @@ const AIChatbot: React.FC = () => {
   const { isChatOpen, setChatOpen } = useApp();
   const [hasInteracted, setHasInteracted] = useState(false);
 
+  // Sync interaction state when chat is opened externally (e.g. from Navbar)
+  React.useEffect(() => {
+    if (isChatOpen && !hasInteracted) {
+      setHasInteracted(true);
+    }
+  }, [isChatOpen, hasInteracted]);
+
   const toggleChat = () => {
     setChatOpen(!isChatOpen);
-    if (!hasInteracted) setHasInteracted(true);
   };
 
   return (
