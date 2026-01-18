@@ -86,6 +86,7 @@ const Hero: React.FC = () => {
               className="block text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-cyan-600 to-violet-600 dark:from-white dark:via-cyan-400 dark:to-violet-400 opacity-0 animate-fade-in-up delay-100"
             >
               {title}
+              <span className="inline-block w-[3px] h-[0.9em] bg-violet-600 dark:bg-violet-400 ml-1 align-middle animate-pulse" />
             </span>
           </h1>
 
