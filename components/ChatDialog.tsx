@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Send, Bot, User, Loader2, Minimize2, Sparkles, RotateCcw } from 'lucide-react';
+import { Send, Bot, User, Loader2, X, Sparkles, RotateCcw } from 'lucide-react';
 import { useApp } from '@/app/providers';
 import { SUGGESTED_QUESTIONS, WELCOME_MESSAGE } from '@/constants/chatbot';
 
@@ -164,10 +164,12 @@ const ChatDialog: React.FC<ChatDialogProps> = ({ isOpen, onClose }) => {
             className={`
                 fixed z-50 transition-all duration-500 ease-out-expo
                 ${isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}
-                bottom-6 right-6 w-[90vw] md:w-[420px] h-[650px] max-h-[85vh]
-                bg-white/90 dark:bg-navy-900/95 backdrop-blur-xl
-                border border-slate-200 dark:border-cyan-500/30
-                rounded-2xl shadow-2xl flex flex-col overflow-hidden
+                bottom-0 right-0 w-full md:w-[420px] 
+                md:bottom-6 md:right-6 
+                h-[85vh] md:h-[650px] md:max-h-[85vh]
+                bg-white/95 dark:bg-navy-900/95 backdrop-blur-xl
+                border-t md:border border-slate-200 dark:border-cyan-500/30
+                rounded-t-2xl md:rounded-2xl shadow-2xl flex flex-col overflow-hidden
             `}
         >
             {/* Header */}
@@ -197,8 +199,9 @@ const ChatDialog: React.FC<ChatDialogProps> = ({ isOpen, onClose }) => {
                     <button
                         onClick={onClose}
                         className="p-2 hover:bg-slate-200 dark:hover:bg-white/10 rounded-lg text-slate-500 dark:text-slate-400 transition-colors"
+                        title={lang === 'ar' ? 'إغلاق' : 'Close'}
                     >
-                        <Minimize2 size={18} />
+                        <X size={22} />
                     </button>
                 </div>
             </div>
