@@ -119,7 +119,7 @@ const Hero: React.FC = () => {
 
         {/* Right: 3D Visualization - Hidden on Mobile for Performance */}
         <div className="hidden lg:block relative z-20 mt-10 lg:mt-0 min-h-[500px]">
-          {mounted && window.innerWidth >= 1024 && (
+          {mounted && (
             <Reveal delay={0.2} direction="left">
               <Hero3D />
             </Reveal>

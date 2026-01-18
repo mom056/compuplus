@@ -19,11 +19,17 @@ export default function ClientBackgrounds() {
     const [shouldMount, setShouldMount] = useState(false);
 
     useEffect(() => {
-        // Defer heavy components to after LCP paint
-        const timer = setTimeout(() => {
-            setShouldMount(true);
-        }, 1500); // Reduced from 2000 for better UX balance
-        return () => clearTimeout(timer);
+        // Use requestIdleCallback for efficient deferred loading
+        // Falls back to setTimeout on browsers without support
+        const scheduleMount = () => {
+            if ('requestIdleCallback' in window) {
+                (window as typeof window & { requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => number })
+                    .requestIdleCallback(() => setShouldMount(true), { timeout: 2000 });
+            } else {
+                setTimeout(() => setShouldMount(true), 1500);
+            }
+        };
+        scheduleMount();
     }, []);
 
     if (!shouldMount) {

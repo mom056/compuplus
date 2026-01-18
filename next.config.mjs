@@ -5,6 +5,7 @@ const nextConfig = {
   poweredByHeader: false,
   experimental: {
     optimizePackageImports: ['lucide-react', 'framer-motion'],
+    optimizeCss: true, // Reduces render-blocking CSS
   },
   images: {
     remotePatterns: [
