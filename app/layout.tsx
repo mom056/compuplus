@@ -115,7 +115,7 @@ export default function RootLayout({
             </head>
             <body className={`${inter.variable} ${cairo.variable} ${firaCode.variable} font-sans`}>
                 <Providers>
-                    <main className="min-h-screen text-slate-900 dark:text-slate-200 selection:bg-violet-500/30 selection:text-violet-900 dark:selection:text-cyan-100">
+                    <main className="min-h-screen text-slate-900 dark:text-slate-200 selection:bg-violet-500/30 selection:text-violet-900 dark:selection:text-cyan-100 pb-24 lg:pb-0">
                         {/* Clientside effects (Background, Chatbot & ScrollProgress - Deferred) */}
                         <ClientBackgrounds />
 
