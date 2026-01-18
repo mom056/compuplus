@@ -1,20 +1,41 @@
 "use client";
 
-import { m, useScroll, useSpring } from "framer-motion";
+import React, { useEffect, useState } from "react";
 
 export default function ScrollProgress() {
-    const { scrollYProgress } = useScroll();
+    const [progress, setProgress] = useState(0);
 
-    const scaleX = useSpring(scrollYProgress, {
-        stiffness: 100,
-        damping: 30,
-        restDelta: 0.001
-    });
+    useEffect(() => {
+        let rafId: number;
+
+        const handleScroll = () => {
+            const totalScroll = document.documentElement.scrollTop;
+            const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+
+            if (windowHeight === 0) return;
+
+            const scroll = totalScroll / windowHeight;
+
+            // Use RAF to throttle updates
+            cancelAnimationFrame(rafId);
+            rafId = requestAnimationFrame(() => {
+                setProgress(scroll);
+            });
+        };
+
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+            cancelAnimationFrame(rafId);
+        };
+    }, []);
 
     return (
-        <m.div
-            className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 to-violet-500 origin-left z-[100]"
-            style={{ scaleX }}
+        <div
+            className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 to-violet-500 origin-left z-[100] transition-transform duration-100 ease-out will-change-transform"
+            style={{
+                transform: `scaleX(${progress})`
+            }}
         />
     );
 }
