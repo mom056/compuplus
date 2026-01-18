@@ -5,7 +5,7 @@ import { useApp } from '@/app/providers';
 import { Reveal } from './Reveal';
 import { Building2, Grid, Activity, Search, X, Zap, Database } from 'lucide-react';
 import { SpotlightCard } from './SpotlightCard';
-import { motion, AnimatePresence } from 'framer-motion';
+// Removed framer-motion - using CSS animations instead for better performance
 
 interface ClientImage {
     name: string;
@@ -107,35 +107,30 @@ const Clients: React.FC = () => {
                             ))}
                         </div>
 
-                        {/* Search Bar (Auto-expands) */}
-                        <AnimatePresence>
-                            {viewMode === 'grid' && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: -10, width: 0 }}
-                                    animate={{ opacity: 1, y: 0, width: 'auto' }}
-                                    exit={{ opacity: 0, y: -10, width: 0 }}
-                                    className="relative group w-full lg:w-80"
-                                >
-                                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-cyan-500/50 group-focus-within:text-cyan-500 transition-colors" />
-                                    <input
-                                        type="text"
-                                        placeholder={lang === 'ar' ? 'بحث في قاعدة البيانات...' : 'Search database...'}
-                                        value={searchQuery}
-                                        onChange={(e) => setSearchQuery(e.target.value)}
-                                        className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-white/10 rounded-xl text-sm text-slate-900 dark:text-cyan-50 placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:outline-none focus:border-cyan-500/50 focus:bg-white dark:focus:bg-slate-900/80 transition-all shadow-inner"
-                                        autoFocus
-                                    />
-                                    {searchQuery && (
-                                        <button
-                                            onClick={() => setSearchQuery('')}
-                                            className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors"
-                                        >
-                                            <X className="w-3 h-3" />
-                                        </button>
-                                    )}
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
+                        {/* Search Bar (Auto-expands with CSS) */}
+                        {viewMode === 'grid' && (
+                            <div
+                                className="relative group w-full lg:w-80 animate-fade-in-up"
+                            >
+                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-cyan-500/50 group-focus-within:text-cyan-500 transition-colors" />
+                                <input
+                                    type="text"
+                                    placeholder={lang === 'ar' ? 'بحث في قاعدة البيانات...' : 'Search database...'}
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-white/10 rounded-xl text-sm text-slate-900 dark:text-cyan-50 placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:outline-none focus:border-cyan-500/50 focus:bg-white dark:focus:bg-slate-900/80 transition-all shadow-inner"
+                                    autoFocus
+                                />
+                                {searchQuery && (
+                                    <button
+                                        onClick={() => setSearchQuery('')}
+                                        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors"
+                                    >
+                                        <X className="w-3 h-3" />
+                                    </button>
+                                )}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

@@ -1,25 +1,29 @@
 "use client";
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useApp } from '@/app/providers';
 
 const ParticleBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { theme } = useApp(); // Get theme from context
+  const [isMobile, setIsMobile] = useState(true); // Default to mobile to prevent flash
+
+  // Use matchMedia instead of window.innerWidth to avoid forced reflows
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(min-width: 768px)');
+    setIsMobile(!mediaQuery.matches);
+
+    const handler = (e: MediaQueryListEvent) => setIsMobile(!e.matches);
+    mediaQuery.addEventListener('change', handler);
+    return () => mediaQuery.removeEventListener('change', handler);
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas || isMobile) return;
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-
-    // PERFORMANCE OPTIMIZATION: Disable completely on mobile
-    if (window.innerWidth < 768) {
-      return;
-    }
-
-    // --- CONFIGURATION ---
     let width = 0, height = 0;
     let particles: Particle[] = [];
     let pulses: Pulse[] = [];
@@ -251,7 +255,8 @@ const ParticleBackground: React.FC = () => {
     };
 
     const handleResize = () => {
-      if (window.innerWidth < 768) {
+      // Use matchMedia which doesn't trigger forced reflow
+      if (!window.matchMedia('(min-width: 768px)').matches) {
         particles = []; // Clear particles
         if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
         return;
