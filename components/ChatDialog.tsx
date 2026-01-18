@@ -166,7 +166,7 @@ const ChatDialog: React.FC<ChatDialogProps> = ({ isOpen, onClose }) => {
                 ${isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}
                 bottom-[80px] right-0 w-full md:w-[420px] 
                 md:bottom-6 md:right-6 
-                h-[85vh] md:h-[650px] md:max-h-[85vh]
+                h-[calc(100dvh-90px)] md:h-[650px] md:max-h-[85vh]
                 bg-white/95 dark:bg-navy-900/95 backdrop-blur-xl
                 border-t md:border border-slate-200 dark:border-cyan-500/30
                 rounded-t-2xl md:rounded-2xl shadow-2xl flex flex-col overflow-hidden
