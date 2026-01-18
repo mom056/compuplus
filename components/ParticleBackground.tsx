@@ -14,6 +14,11 @@ const ParticleBackground: React.FC = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    // PERFORMANCE OPTIMIZATION: Disable completely on mobile
+    if (window.innerWidth < 768) {
+      return;
+    }
+
     // --- CONFIGURATION ---
     let width = 0, height = 0;
     let particles: Particle[] = [];
@@ -246,6 +251,11 @@ const ParticleBackground: React.FC = () => {
     };
 
     const handleResize = () => {
+      if (window.innerWidth < 768) {
+        particles = []; // Clear particles
+        if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
+        return;
+      }
       init();
     };
 

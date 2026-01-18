@@ -42,8 +42,10 @@ const Hero: React.FC = () => {
   const count = useMotionValue(0);
   const rounded = useTransform(count, (latest) => Math.round(latest));
   const displayText = useTransform(rounded, (latest) => title.slice(0, latest));
+  const [mounted, setMounted] = React.useState(false);
 
   useEffect(() => {
+    setMounted(true);
     count.set(0);
     const controls = animate(count, title.length, {
       type: "tween",
@@ -137,9 +139,11 @@ const Hero: React.FC = () => {
 
         {/* Right: 3D Visualization - Hidden on Mobile for Performance */}
         <div className="hidden lg:block relative z-20 mt-10 lg:mt-0 min-h-[500px]">
-          <Reveal delay={0.2} direction="left">
-            <Hero3D />
-          </Reveal>
+          {mounted && window.innerWidth >= 1024 && (
+            <Reveal delay={0.2} direction="left">
+              <Hero3D />
+            </Reveal>
+          )}
         </div>
 
       </div>
