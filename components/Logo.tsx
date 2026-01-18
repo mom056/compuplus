@@ -19,6 +19,8 @@ export const Logo: React.FC<{ className?: string }> = ({ className = "w-10 h-10"
           quality={75}
           className="object-contain drop-shadow-lg w-full h-full"
           priority
+          fetchPriority="high"
+          decoding="async"
           onError={() => setImgError(true)}
         />
       </div>
