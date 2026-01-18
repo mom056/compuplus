@@ -11,7 +11,7 @@ const CTA: React.FC = () => {
       <div className="absolute inset-0 bg-gradient-to-r from-violet-900/90 to-cyan-900/90 dark:from-navy-950/90 dark:to-navy-900/90 z-0 backdrop-blur-sm" />
 
       {/* Pattern Overlay */}
-      <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] z-0 mix-blend-overlay" />
+      <div className="absolute inset-0 opacity-20 bg-[url('/patterns/cubes.png')] z-0 mix-blend-overlay" />
 
       {/* Glow Effects */}
       <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-black/0 via-black/0 to-black/50 z-0" />

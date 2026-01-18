@@ -5,7 +5,7 @@ import { ArrowRight } from 'lucide-react';
 import { useApp } from '@/app/providers';
 import { Reveal } from './Reveal';
 import dynamic from 'next/dynamic';
-import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
+import { m, useMotionValue, useTransform, animate } from 'framer-motion';
 
 // Dynamically import Hero3D - only on desktop for performance
 const Hero3D = dynamic(() => import('./Hero3D'), {
@@ -101,8 +101,8 @@ const Hero: React.FC = () => {
 
             {/* Actual Animated Text Overlay */}
             <span className="absolute inset-0 top-0 left-0 text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-cyan-600 to-violet-600 dark:from-white dark:via-cyan-400 dark:to-violet-400">
-              <motion.span>{displayText}</motion.span>
-              <motion.span
+              <m.span>{displayText}</m.span>
+              <m.span
                 animate={{ opacity: [0, 1, 0] }}
                 transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
                 className="inline-block w-[3px] h-[0.9em] bg-violet-600 dark:bg-violet-400 ml-1 align-middle"
