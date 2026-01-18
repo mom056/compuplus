@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Menu, X, Sun, Moon, Globe } from 'lucide-react';
+import { Menu, X, Sun, Moon, Globe, Home, Briefcase, Mail, Zap, LayoutGrid } from 'lucide-react';
 import { Logo } from './Logo';
 import { useApp } from '@/app/providers';
 
@@ -36,11 +36,9 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
   // Robust scrolling function
   const handleNavClick = async (e: React.MouseEvent<HTMLAnchorElement | HTMLElement>, id: string) => {
     e.preventDefault();
-    setIsMobileMenuOpen(false);
+    setIsMobileMenuOpen(false); // Close menu if open
 
-    // If we are not on the home page and the link is a section link (starts with #)
     if (window.location.pathname !== '/' && id.startsWith('#')) {
-      // Navigate to home page first
       window.location.href = '/' + id;
       return;
     }
@@ -49,12 +47,8 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
     const element = document.getElementById(targetId);
 
     if (element) {
-      // Use scrollIntoView with timeout to ensure UI is ready
       setTimeout(() => {
-        element.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start'
-        });
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 100);
     } else if (targetId === 'hero') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -69,6 +63,14 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
     { label: content.nav.legacy, href: '#journey', isRoute: false },
     { label: content.nav.work, href: '#portfolio', isRoute: false },
     { label: content.nav.contact, href: '#contact', isRoute: false },
+  ];
+
+  // Selected items for Bottom Bar
+  const bottomNavItems = [
+    { label: lang === 'ar' ? 'الرئيسية' : 'Home', href: '#hero', icon: Home },
+    { label: lang === 'ar' ? 'خدماتنا' : 'Services', href: '#services', icon: Zap },
+    { label: lang === 'ar' ? 'أعمالنا' : 'Work', href: '#portfolio', icon: Briefcase },
+    { label: lang === 'ar' ? 'تواصل' : 'Contact', href: '#contact', icon: Mail },
   ];
 
   return (
@@ -89,7 +91,7 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
             onClick={(e) => handleNavClick(e, '#hero')}
             className="flex items-center gap-2 cursor-pointer group relative"
           >
-            {/* Logo Container for Overflow */}
+            {/* Logo Container */}
             <div className="relative w-10 h-10 flex items-center justify-center">
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80px] h-[80px]">
                 <Logo className="w-full h-full group-hover:animate-spin-slow" />
@@ -154,47 +156,79 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
             </button>
           </div>
 
-          {/* Mobile Toggle */}
-          <div className="flex items-center gap-4 lg:hidden">
+          {/* Mobile Top Controls (Logo is already left) */}
+          <div className="flex items-center gap-3 lg:hidden">
             <button
               onClick={toggleLang}
-              className="text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-cyan-600 font-sans"
-              aria-label="Switch Language Mobile"
+              className="text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-cyan-600 font-sans border border-slate-200 dark:border-white/10 px-2 py-1 rounded-lg"
             >
               {lang === 'en' ? 'AR' : 'EN'}
             </button>
 
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-white/10 transition-colors text-slate-600 dark:text-slate-300"
-              aria-label="Toggle Theme Mobile"
+              className="p-2 rounded-full bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-white/10"
             >
-              {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-            </button>
-            <button
-              className="text-slate-900 dark:text-white p-1"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label="Toggle Mobile Menu"
-            >
-              {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
             </button>
           </div>
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay */}
+      {/* --- Mobile Bottom Navigation --- */}
+      <div className="fixed bottom-0 left-0 right-0 z-[60] bg-white/90 dark:bg-navy-950/90 backdrop-blur-xl border-t border-slate-200 dark:border-white/10 lg:hidden pb-safe">
+        <div className="flex justify-around items-center px-2 py-3">
+          {bottomNavItems.map((item) => (
+            <a
+              key={item.label}
+              href={item.href}
+              onClick={(e) => handleNavClick(e, item.href)}
+              className="flex flex-col items-center gap-1 p-2 rounded-lg active:scale-95 transition-transform group"
+            >
+              <item.icon size={22} className="text-slate-500 dark:text-slate-400 group-hover:text-cyan-500 dark:group-hover:text-cyan-400 transition-colors" />
+              <span className="text-[10px] font-medium text-slate-600 dark:text-slate-400 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
+                {item.label}
+              </span>
+            </a>
+          ))}
+
+          {/* More / Menu Button */}
+          <button
+            onClick={() => setIsMobileMenuOpen(true)}
+            className="flex flex-col items-center gap-1 p-2 rounded-lg active:scale-95 transition-transform group"
+          >
+            <LayoutGrid size={22} className="text-slate-500 dark:text-slate-400 group-hover:text-violet-500 dark:group-hover:text-violet-400 transition-colors" />
+            <span className="text-[10px] font-medium text-slate-600 dark:text-slate-400 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors">
+              {lang === 'ar' ? 'المزيد' : 'More'}
+            </span>
+          </button>
+        </div>
+      </div>
+
+      {/* Full Screen Menu Overlay (Triggered by 'More') */}
       <div
-        className={`fixed inset-0 bg-white/95 dark:bg-navy-900/95 backdrop-blur-xl z-40 transition-transform duration-500 ease-in-out lg:hidden flex flex-col pt-24 px-6 gap-6 ${isMobileMenuOpen ? 'translate-y-0' : '-translate-y-full'
-          }`}
+        className={`fixed inset-0 bg-white/95 dark:bg-navy-900/95 backdrop-blur-xl z-[70] transition-transform duration-500 ease-in-out lg:hidden flex flex-col pt-24 px-6 gap-6 ${isMobileMenuOpen ? 'translate-y-0' : 'translate-y-full'}`}
       >
+        <button
+          onClick={() => setIsMobileMenuOpen(false)}
+          className="absolute top-6 right-6 p-2 rounded-full bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-slate-300"
+        >
+          <X size={24} />
+        </button>
+
+        <h2 className="text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2">
+          {lang === 'ar' ? 'القائمة الكاملة' : 'Full Menu'}
+        </h2>
+
         {navItems.map((item) => (
           item.isRoute ? (
             <Link
               key={item.label}
               href={item.href}
               onClick={() => setIsMobileMenuOpen(false)}
-              className="text-2xl font-bold text-slate-800 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 text-center font-sans py-2 border-b border-slate-100 dark:border-white/5"
+              className="text-2xl font-bold text-slate-800 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 text-start font-sans py-3 border-b border-slate-100 dark:border-white/5 flex items-center gap-3"
             >
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-500"></span>
               {item.label}
             </Link>
           ) : (
@@ -202,16 +236,17 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
               key={item.label}
               href={item.href}
               onClick={(e) => handleNavClick(e, item.href)}
-              className="text-2xl font-bold text-slate-800 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 text-center font-sans py-2 border-b border-slate-100 dark:border-white/5"
+              className="text-2xl font-bold text-slate-800 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 text-start font-sans py-3 border-b border-slate-100 dark:border-white/5 flex items-center gap-3"
             >
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-500"></span>
               {item.label}
             </a>
           )
         ))}
+
         <button
           onClick={(e) => handleNavClick(e, '#contact')}
-          className="w-full py-4 bg-cyan-600 hover:bg-cyan-500 text-white rounded font-bold mt-4 shadow-lg transition-colors"
-          aria-label="Get a Quote"
+          className="w-full py-4 bg-gradient-to-r from-cyan-600 to-violet-600 hover:from-cyan-500 hover:to-violet-500 text-white rounded-xl font-bold mt-auto mb-24 shadow-lg transition-all"
         >
           {content.nav.quote}
         </button>
