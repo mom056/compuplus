@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, createContext, useContext } from 'react';
+import { ThemeProvider, useTheme } from 'next-themes';
 import { CONTENT, Language } from '../constants';
 
 // Create Context
@@ -22,55 +23,30 @@ export const AppContext = createContext<AppContextType>({
 
 export const useApp = () => useContext(AppContext);
 
-export function Providers({ children }: { children: React.ReactNode }) {
-    const [theme, setTheme] = useState('dark');
+// Component to expose theme via context to match existing API
+const AppContentProvider = ({ children }: { children: React.ReactNode }) => {
+    const { theme, setTheme, resolvedTheme } = useTheme();
     const [lang, setLang] = useState<Language>('en');
     const [mounted, setMounted] = useState(false);
 
-    // Mark as mounted after hydration
     useEffect(() => {
         setMounted(true);
-    }, []);
-
-    // Theme Initialization Effect
-    useEffect(() => {
-        if (!mounted) return;
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-            setTheme(savedTheme);
-        } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            setTheme('dark');
-        }
-
         // Load saved language
         const savedLang = localStorage.getItem('lang') as Language;
         if (savedLang && (savedLang === 'en' || savedLang === 'ar')) {
             setLang(savedLang);
         }
-    }, [mounted]);
+    }, []);
 
-    // Theme Effect
-    useEffect(() => {
-        if (!mounted) return;
-        const root = window.document.documentElement;
-        if (theme === 'dark') {
-            root.classList.add('dark');
-        } else {
-            root.classList.remove('dark');
-        }
-        localStorage.setItem('theme', theme);
-    }, [theme, mounted]);
-
-    // Language Effect (Keep LTR for all languages, just change font)
+    // Language Effect (Font & Dir)
     useEffect(() => {
         if (!mounted) return;
         const root = window.document.documentElement;
 
-        // Keep LTR direction for all languages
+        // Keep LTR direction for all languages (as per previous logic)
         root.setAttribute('dir', 'ltr');
         root.setAttribute('lang', lang);
 
-        // Save language to localStorage
         localStorage.setItem('lang', lang);
 
         // Change font for Arabic
@@ -84,23 +60,27 @@ export function Providers({ children }: { children: React.ReactNode }) {
     }, [lang, mounted]);
 
     const toggleTheme = () => {
-        setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+        setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
     };
 
     const content = CONTENT[lang];
-
-    // Prevent hydration mismatch by not rendering children until mounted
-    if (!mounted) {
-        return (
-            <div className="min-h-screen bg-white dark:bg-slate-900 flex items-center justify-center">
-                <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin" />
-            </div>
-        );
-    }
+    // Use resolvedTheme (or 'dark' fallback) for context consumers
+    const currentTheme = (mounted && resolvedTheme) ? resolvedTheme : 'dark';
 
     return (
-        <AppContext.Provider value={{ lang, setLang, content, theme, toggleTheme }}>
+        <AppContext.Provider value={{ lang, setLang, content, theme: currentTheme, toggleTheme }}>
             {children}
         </AppContext.Provider>
+    );
+};
+
+export function Providers({ children }: { children: React.ReactNode }) {
+    return (
+        // attribute="class" is crucial for Tailwind dark mode
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+            <AppContentProvider>
+                {children}
+            </AppContentProvider>
+        </ThemeProvider>
     );
 }

@@ -99,7 +99,7 @@ export default function RootLayout({
     };
 
     return (
-        <html lang="en" className="scroll-smooth">
+        <html lang="en" className="scroll-smooth" suppressHydrationWarning>
             <head>
                 {/* Preconnect to critical third-party origins for faster LCP */}
                 <link rel="preconnect" href="https://images.unsplash.com" />

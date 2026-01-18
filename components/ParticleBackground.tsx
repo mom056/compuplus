@@ -178,8 +178,8 @@ const ParticleBackground: React.FC = () => {
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
 
-      // Responsive count
-      const count = width < 768 ? 40 : width < 1280 ? 80 : 120;
+      // Responsive count - Optimized for performance
+      const count = width < 768 ? 25 : width < 1280 ? 50 : 80;
 
       particles = [];
       for (let i = 0; i < count; i++) {
