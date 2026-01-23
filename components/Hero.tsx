@@ -67,21 +67,17 @@ const Hero: React.FC = () => {
         {/* Left: Content - ZERO JS LCP */}
         <div className="space-y-8 pt-10 lg:pt-0 text-center lg:text-start">
 
-          {/* Badge */}
-          <div
-            className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-violet-500/30 bg-white/50 dark:bg-violet-900/10 backdrop-blur-md shadow-sm opacity-0 animate-fade-in-up"
-          >
-            <span className="relative flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
-            </span>
-            <span className="text-sm font-mono text-slate-700 dark:text-cyan-200 uppercase tracking-widest font-bold">
-              {badge}
-            </span>
+          <div className="opacity-0 animate-fade-in-up">
+            <div className="relative inline-block mb-4">
+              <span className="relative z-10 text-2xl sm:text-3xl md:text-5xl font-black tracking-normal sm:tracking-wide md:tracking-widest text-cyan-600 dark:text-transparent dark:bg-clip-text dark:bg-gradient-to-r dark:from-cyan-400 dark:to-violet-400 font-mono uppercase drop-shadow-sm select-none whitespace-nowrap">
+                {badge}
+              </span>
+              <div className="absolute -bottom-2 left-0 w-full h-[2px] bg-gradient-to-r from-cyan-500/50 via-violet-500/50 to-cyan-500/50" />
+            </div>
           </div>
 
           {/* Title - ZERO JS LCP */}
-          <h1 className="relative text-4xl md:text-5xl lg:text-7xl font-black leading-[1.1] text-slate-900 dark:text-white tracking-tighter">
+          <h1 className="relative text-3xl md:text-4xl lg:text-6xl font-extrabold leading-[1.1] text-slate-900 dark:text-white tracking-tighter">
             <span
               className="block text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-cyan-600 to-violet-600 dark:from-white dark:via-cyan-400 dark:to-violet-400 opacity-0 animate-fade-in-up delay-100"
             >

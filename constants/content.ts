@@ -14,7 +14,7 @@ export const CONTENT = {
             quote: 'Get Quote',
         },
         hero: {
-            badge: 'Total Digital Transformation',
+            badge: 'CompuPlus depuis 1997',
             title: 'FUSING INFRASTRUCTURE WITH SOFTWARE INTELLIGENCE',
             subtitle: 'From complex Cabling & Data Centers to advanced Enterprise ERP & Custom Software. We are the complete technology partner for your business growth.',
             ctaPrimary: 'Start Transformation',
@@ -118,7 +118,7 @@ export const CONTENT = {
             quote: 'اطلب عرض سعر',
         },
         hero: {
-            badge: 'تحول رقمي شامل',
+            badge: 'CompuPlus depuis 1997',
             title: 'دمج البنية التحتية مع ذكاء البرمجيات',
             subtitle: 'من تمديد الشبكات ومراكز البيانات إلى حلول الـ ERP المتكاملة والبرمجيات الخاصة. نحن الشريك التكنولوجي المتكامل لنمو أعمالك.',
             ctaPrimary: 'ابدأ التحول الرقمي',
