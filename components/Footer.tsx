@@ -50,9 +50,13 @@ const Footer: React.FC = () => {
 
             {/* Quick Contact */}
             <div className="space-y-3 text-sm">
-              <a href="https://maps.app.goo.gl/mhFpozETm5NqcuYP7" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors group">
-                <MapPin className="w-4 h-4 text-cyan-500 flex-shrink-0" />
+              <a href="https://maps.app.goo.gl/mhFpozETm5NqcuYP7" target="_blank" rel="noopener noreferrer" className="flex items-start gap-3 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors group">
+                <MapPin className="w-4 h-4 text-cyan-500 flex-shrink-0 mt-1" />
                 <span>{lang === 'ar' ? '128، مصطفى النحاس، مدينة نصر' : '128, Mostafa ElNahas, Nasr City'}</span>
+              </a>
+              <a href="https://maps.app.goo.gl/FrBUoZnBtGhoMjrVA" target="_blank" rel="noopener noreferrer" className="flex items-start gap-3 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors group">
+                <MapPin className="w-4 h-4 text-cyan-500 flex-shrink-0 mt-1" />
+                <span>{lang === 'ar' ? '83 18 شارع السودان، الدقي، الجيزة' : 'Sudan St, Dokki, Giza'}</span>
               </a>
               <a href="mailto:info@compuplus.cc" className="flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">
                 <Mail className="w-4 h-4 text-violet-500 flex-shrink-0" />
@@ -85,7 +89,7 @@ const Footer: React.FC = () => {
               {SOCIAL_LINKS.map((social) => (
                 <a
                   key={social.id}
-                  href={social.url}
+                  href={social.id === 'instagram' ? 'https://www.instagram.com/compuplus_?igsh=cDU2am1nMnBoNmx6' : social.url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/5 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-white/10 hover:border-slate-300 dark:hover:border-white/10 transition-all duration-300"

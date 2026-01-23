@@ -27,7 +27,7 @@ const SOCIAL_LINKS = [
   { id: 'whatsapp', name: 'WhatsApp', url: 'https://wa.me/20222728010', icon: MessageCircle, color: 'bg-gradient-to-br from-green-500 to-green-600 hover:from-green-400 hover:to-green-500' },
   { id: 'facebook', name: 'Facebook', url: 'https://www.facebook.com/Compuplusc', icon: Facebook, color: 'bg-gradient-to-br from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600' },
   { id: 'linkedin', name: 'LinkedIn', url: 'https://www.linkedin.com/in/raafat-girgis-a4a91674', icon: Linkedin, color: 'bg-gradient-to-br from-blue-700 to-blue-800 hover:from-blue-600 hover:to-blue-700' },
-  { id: 'instagram', name: 'Instagram', url: 'https://instagram.com/compuplus', icon: Instagram, color: 'bg-gradient-to-br from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500' },
+  { id: 'instagram', name: 'Instagram', url: 'https://www.instagram.com/compuplus_?igsh=cDU2am1nMnBoNmx6', icon: Instagram, color: 'bg-gradient-to-br from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500' },
 ];
 
 const Contact: React.FC = () => {
@@ -35,6 +35,25 @@ const Contact: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+
+  const BRANCHES = [
+    {
+      id: 'nasr-city',
+      address: {
+        en: '128, Mostafa ElNahas, Nasr City',
+        ar: '128، مصطفى النحاس، مدينة نصر'
+      },
+      mapsLink: 'https://maps.app.goo.gl/mhFpozETm5NqcuYP7'
+    },
+    {
+      id: 'dokki',
+      address: {
+        en: 'Sudan St, Dokki, Giza',
+        ar: '83 18شارع السودان، الدقي، الجيزة'
+      },
+      mapsLink: 'https://maps.app.goo.gl/FrBUoZnBtGhoMjrVA'
+    }
+  ];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -103,31 +122,36 @@ const Contact: React.FC = () => {
           {/* Left Column - Contact Info Cards */}
           <div className="lg:col-span-2 space-y-6">
 
-            {/* Location Card */}
+            {/* Location Cards */}
             <SpotlightCard className="rounded-2xl p-6 group">
               <div className="flex items-start gap-5">
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500 to-cyan-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-cyan-500/30 group-hover:scale-110 transition-transform">
                   <MapPin className="w-6 h-6 text-white" />
                 </div>
                 <div className="flex-1">
-                  <h4 className="text-xs text-cyan-600 dark:text-cyan-400 uppercase font-mono tracking-widest mb-2">
+                  <h4 className="text-xs text-cyan-600 dark:text-cyan-400 uppercase font-mono tracking-widest mb-4">
                     {content.contact.locationTitle}
                   </h4>
-                  <p className="text-slate-900 dark:text-white font-semibold text-lg mb-1">
-                    {lang === 'ar' ? COMPANY_INFO.address.ar : COMPANY_INFO.address.en}
-                  </p>
-                  <p className="text-sm text-slate-500 dark:text-slate-400">
-                    {lang === 'ar' ? 'الرمز البريدي: ' : 'Postal Code: '}{COMPANY_INFO.postalCode}
-                  </p>
-                  <a
-                    href={COMPANY_INFO.mapsLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-xs text-cyan-500 hover:text-cyan-400 mt-3 font-mono uppercase"
-                  >
-                    <span>{lang === 'ar' ? 'عرض على الخريطة' : 'View on Map'}</span>
-                    <ExternalLink className="w-3 h-3" />
-                  </a>
+
+                  <div className="flex flex-col gap-6">
+                    {BRANCHES.map((branch) => (
+                      <div key={branch.id} className="border-b border-slate-100 dark:border-white/5 last:border-0 last:pb-0 pb-4">
+                        <p className="text-slate-900 dark:text-white font-semibold text-base mb-1">
+                          {lang === 'ar' ? branch.address.ar : branch.address.en}
+                        </p>
+                        <a
+                          href={branch.mapsLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 text-xs text-cyan-500 hover:text-cyan-400 mt-2 font-mono uppercase"
+                        >
+                          <span>{lang === 'ar' ? 'عرض على الخريطة' : 'View on Map'}</span>
+                          <ExternalLink className="w-3 h-3" />
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+
                 </div>
               </div>
             </SpotlightCard>
